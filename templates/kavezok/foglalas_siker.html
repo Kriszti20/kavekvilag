@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foglalás sikeres</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Stílusok */
+        body {
+            margin: 0;
+            font-family: 'Georgia', serif;
+            background-color: #1f4037;
+            color: white;
+            text-align: center;
+        }
+
+        h1, h2, p {
+            margin: 0 0 20px 0;
+        }
+
+        a {
+            color: #d59a6f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #cf9775;
+        }
+
+        .message-container {
+            padding: 50px 20px;
+        }
+
+        .menu-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .menu-link a {
+            background-color: #d59a6f;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .menu-link a:hover {
+            background-color: #c88b5f;
+        }
+
+        /* Fejléc */
+        header {
+            background-color: #1c2824;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        header .logo {
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+        }
+
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        header nav a:hover {
+            color: #cf9775;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1c2824;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fejléc -->
+    <header>
+        <div class="logo">Kávék világa</div>
+        <nav>
+            <a href="#kavezok">Kávézók</a>
+            <a href="#rolunk">Rólunk</a>
+            <a href="#kapcsolat">Kapcsolat</a>
+            <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
+        </nav>
+    </header>
+
+    <!-- Sikerüzenet -->
+    <div class="message-container">
+        <h1>Foglalás sikeres!</h1>
+        <p>Köszönjük, hogy foglaltál nálunk! Hamarosan találkozunk a kiválasztott kávézóban.</p>
+        <div class="menu-link">
+            <a href="{% url 'kavezok:foglalasok_lista' %}">Vissza a foglalásaimhoz</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Kávék világa © 2023. Minden jog fenntartva. | Kapcsolat: info@kavekvilaga.hu</p>
+    </footer>
+</body>
+</html>

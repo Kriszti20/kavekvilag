@@ -1,0 +1,218 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kávézók keresése</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Globális stílusok */
+        body {
+            margin: 0;
+            font-family: 'Georgia', serif;
+            background-color: #1f4037; /* Háttér színe */
+            color: white;
+        }
+
+        /* Fejléc stílus */
+        header {
+            background-color: #1c2824; /* Fejléc háttér */
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        header nav a:hover {
+            color: #cf9775; /* Világosbarna szín */
+        }
+
+        .user-info {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .user-info span {
+            font-size: 1rem;
+        }
+
+        header .logout-form button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        header .logout-form button:hover {
+            color: #cf9775;
+        }
+
+        /* Tartalom Cím */
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #dfa26f; /* Szöveg színe */
+            margin: 20px 0;
+        }
+
+
+
+        /* Tartalom kialakítása */
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 40px auto 0 auto;
+            text-align: center;
+        }
+
+        form {
+            background-color: #1c2824; /* Sötét panel */
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        form label {
+            display: block;
+            font-size: 1.1rem;
+            margin: 10px 0 5px;
+            color: #cf9775; /* Világosbarna */
+        }
+
+        form input, form select, form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        form input, form select {
+            background-color: #f4efe9; /* Szövegmező */
+            color: #333;
+        }
+
+        form button {
+            background-color: #d59a6f;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        form button:hover {
+            background-color: #c88b5f;
+            transform: translateY(-2px);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+
+        ul li {
+            background-color: #1c2824;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            text-align: left;
+        }
+
+        ul li h2 {
+            margin-top: 0;
+            color: #dfa26f; /* Világosbarna */
+        }
+
+        ul li p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fejléc -->
+    <header>
+        <div class="logo">Kávék világa</div>
+        <nav>
+            <a href="/">Kezdőlap</a>
+            <a href="#rolunk">Rólunk</a>
+            <a href="#kapcsolat">Kapcsolat</a>
+            <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+        </nav>
+        <div class="user-info">
+            {% if user.is_authenticated %}
+                <span>Bejelentkezve: {{ user.username }}</span>
+                <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit">Kijelentkezés</button>
+                </form>
+            {% else %}
+                <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Tartalom -->
+    <h1>Kávézók keresése</h1>
+    <form method="GET" action="">
+        <label for="helyszin">Helyszín:</label>
+        <input type="text" id="helyszin" name="helyszin" value="{{ request.GET.helyszin }}" placeholder="Pl. Budapest">
+
+        <label for="arkategoria">Árkategória:</label>
+        <select id="arkategoria" name="arkategoria">
+            <option value="">-- Válassz --</option>
+            <option value="Olcsó" {% if request.GET.arkategoria == "Olcsó" %}selected{% endif %}>Olcsó</option>
+            <option value="Közepes" {% if request.GET.arkategoria == "Közepes" %}selected{% endif %}>Közepes</option>
+            <option value="Drága" {% if request.GET.arkategoria == "Drága" %}selected{% endif %}>Drága</option>
+        </select>
+        <button type="submit">Keresés</button>
+    </form>
+
+    <!-- Kávézók listája -->
+    <ul>
+        {% for kavezo in kavezok %}
+            <li>
+                <h2>
+                    <a href="{% url 'kavezok:kavezo_reszletek' kavezo.id %}" style="color: #dfa26f; text-decoration: none;">
+                        {{ kavezo.nev }}
+                    </a>
+                </h2>
+                <p><strong>Cím:</strong> {{ kavezo.cim }}</p>
+                <p><strong>Árkategória:</strong> {{ kavezo.arkategoriak }}</p>
+                <p><strong>Hangulat:</strong> {{ kavezo.hangulat }}</p>
+            </li>
+        {% empty %}
+            <li><p>Nincsenek találatok a megadott keresési feltételek alapján.</p></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+

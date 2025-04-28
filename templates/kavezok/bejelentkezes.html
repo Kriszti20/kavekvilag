@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Bejelentkezés | Kávék világa</title>
+    <style>
+        body {
+            background: #16332a;
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            color: #f5eadc;
+        }
+        .navbar {
+            background: #19392d;
+            padding: 0;
+            box-shadow: 0 4px 14px #0003;
+        }
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .logo {
+            color: #ffe1b3;
+            font-size: 2.1rem;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+        nav a {
+            color: #ffe1b3;
+            text-decoration: none;
+            margin-left: 28px;
+            font-size: 1.13rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        nav a:hover {
+            color: #ffcb80;
+        }
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-box {
+            background: #254137;
+            border-radius: 17px;
+            box-shadow: 0 8px 32px #0002;
+            padding: 36px 38px 24px 38px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-box h1 {
+            color: #e1a874;
+            margin-bottom: 28px;
+            font-size: 2.22rem;
+        }
+        .form-group {
+            margin-bottom: 21px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #f5eadc;
+            font-weight: 600;
+            font-size: 1.08rem;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 11px;
+            border-radius: 7px;
+            border: none;
+            background: #f7f0e9;
+            color: #1b2c24;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+        .btn {
+            width: 100%;
+            padding: 13px 0;
+            background: #e1a874;
+            color: #16332a;
+            font-weight: bold;
+            font-size: 1.18rem;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: background 0.18s;
+            margin-top: 6px;
+        }
+        .btn:hover {
+            background: #ffc57e;
+        }
+        .register-link, .login-box p {
+            color: #e1a874;
+            margin-top: 20px;
+            font-size: 1.05rem;
+        }
+        .register-link a {
+            color: #fff;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .login-box p a {
+            color: #ffcb80;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .error-message {
+            background: #bd5151e6;
+            color: #fff;
+            padding: 10px 0 10px 0;
+            margin: 0 0 20px 0;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        @media (max-width: 570px) {
+            .navbar .container, .login-box {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+            .login-box {
+                padding: 22px 8px 20px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fejléc -->
+    <header class="navbar">
+        <div class="container">
+            <h1 class="logo">Kávék világa</h1>
+            <nav>
+                <a href="/">Kezdőlap</a>
+                <a href="#kavezok">Kávézók</a>
+                <a href="#rolunk">Rólunk</a>
+                <a href="#kapcsolat">Kapcsolat</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Bejelentkezési tartalom -->
+    <main class="login-container">
+        <section class="login-box">
+            <h1>Bejelentkezés</h1>
+    
+            <!-- Hibák kezelése -->
+            {% if error_message %}
+                <p class="error-message">{{ error_message }}</p>
+            {% endif %}
+    
+            <!-- Bejelentkezési űrlap -->
+            <form method="post" action="{% url 'kavezok:bejelentkezes' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_username">Felhasználónév:</label>
+                    <input type="text" name="username" id="id_username" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Jelszó:</label>
+                    <input type="password" name="password" id="id_password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn">Bejelentkezés</button>
+                </div>
+            </form>
+    
+            <p class="register-link">Még nincs fiókod? 
+                <a href="{% url 'kavezok:regisztracio' %}">Regisztrálj itt!</a>
+            </p>
+            <p>
+                Elfelejtetted a jelszavad?
+                <a href="{% url 'kavezok:password_reset' %}">Jelszó visszaállítása</a>
+            </p>
+        </section>
+    </main>
+</body>
+</html>

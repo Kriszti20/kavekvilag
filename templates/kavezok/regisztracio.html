@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regisztráció</title>
+    <style>
+        /* Alap stílusok */
+        body {
+            margin: 0;
+            font-family: 'Georgia', serif; /* Elegáns betűtípus */
+            background-color: #183930; /* Sötétzöld háttér */
+            color: #f0f0f0; /* Világos szöveg */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Középre helyezés */
+        }
+
+        /* Formuláris doboz */
+        .form-container {
+            background-color: #2d4239; /* Sötétzöld doboz */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2); /* Lágy árnyék */
+            text-align: center;
+            width: 100%;
+            max-width: 400px; /* Képernyő középső kisebb méret */
+        }
+
+        .form-container h1 {
+            font-size: 1.8rem;
+            color: #cf9775; /* Világosbarna cím */
+            margin-bottom: 1rem;
+        }
+
+        /* Django beépített formulák stílusa */
+        .form-container form p {
+            margin-bottom: 1rem;
+            text-align: left; /* Mezők igazítása */
+        }
+
+        .form-container form label {
+            color: #f0f0f0; /* Világos címkék */
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .form-container form input {
+            width: 100%;
+            padding: 0.6rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f0f0f0; /* Világos doboz */
+            color: #183930; /* Sötétzöld szöveg */
+            margin-top: 0.3rem;
+        }
+
+        .form-container form input:focus {
+            outline: none;
+            border: 1px solid #cf9775; /* Világosbarna keret */
+        }
+
+        /* Gombok stílusa */
+        .form-container button {
+            width: 100%;
+            padding: 0.7rem;
+            background-color: #cb9152; /* Világosbarna gomb */
+            color: #ffffff; /* Fehér szöveg */
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .form-container button:hover {
+            background-color: #b17d43; /* Sötétebb barna hover */
+        }
+
+        /* Link stílus */
+        .form-container p a {
+            color: #cf9775; /* Világosbarna link */
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .form-container p a:hover {
+            color: #ffbc81; /* Világos narancs hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <!-- templates/registration/register.html -->
+        <h1>Saját regisztrációs oldal</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Regisztráció</button>
+        </form>
+        <p>Már van fiókod? <a href="{% url 'kavezok:bejelentkezes' %}">Jelentkezz be!</a></p>
+    </div>
+</body>
+</html>

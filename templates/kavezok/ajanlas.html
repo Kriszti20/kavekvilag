@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kávézó Ajánlás</title>
+    <style>
+        /* Alap stílusok */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1f4037;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #F9BE7C;
+            margin-bottom: 20px;
+        }
+
+        .kavezo-card {
+            background-color: #2e443e; /* Sötétebb zöld háttér */
+            padding: 15px 20px;
+            margin: 10px 0; /* Térköz a kártyák között */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .kavezo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .kavezo-card h2 {
+            margin: 0;
+            color: #F9BE7C;
+            font-size: 1.5rem;
+        }
+
+        .kavezo-card p {
+            margin: 5px 0;
+            color: #ddd; /* Enyhén halvány szöveg */
+        }
+
+        .no-result {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 50px;
+            color: #F9BE7C;
+        }
+
+        header {
+            background-color: #1c2824;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-family: 'Georgia', serif;
+        }
+
+        header .logo {
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+        }
+
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        header nav a:hover {
+            color: #cf9775; /* Világosbarna árnyalat */
+        }
+
+        header .logout-form {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        header .logout-form button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        header .logout-form button:hover {
+            color: #cf9775;
+        }
+
+
+        /* Responsív stílusok */
+        @media (max-width: 600px) {
+            .kavezo-card {
+                padding: 10px 15px;
+            }
+
+            .kavezo-card h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Kávék világa</div>
+        <nav>
+            <a href="/">Kezdőlap</a>
+            <a href="#kavezok">Kávézók</a>
+            <a href="#rolunk">Rólunk</a>
+            <a href="#kapcsolat">Kapcsolat</a>
+            {% if user.is_authenticated %}
+                <div class="user-info">
+                    <span>Bejelentkezve: {{ user.username }}</span>
+                    <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit">Kijelentkezés</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
+            {% endif %}
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Kávézó Ajánlások</h1>
+        <div style="text-align:center; margin-bottom: 24px;">
+            <button id="kereso-btn" style="background:#F9BE7C; color:#333; font-size:1.12rem; font-family:Georgia,serif;padding:10px 26px; border:none; border-radius:20px;cursor:pointer;font-weight:bold;box-shadow:0 4px 15px -2px rgba(0,0,0,.14);">Kávézók keresése a közelben</button>
+        </div>
+        <div id="kereso-eredmeny"></div>
+
+        <!-- Alapértelmezett (statikus) tartalom, ha JS nincs, vagy első betöltés -->
+        {% if kavezok %}
+            {% for kavezo in kavezok %}
+                <div class="kavezo-card">
+                    <h2>
+                        <a href="{% url 'kavezok:kavezo_reszletek' kavezo.id %}" style="color: #F9BE7C; text-decoration: none;">
+                            {{ kavezo.nev }}
+                        </a>
+                    </h2>
+                    <p><strong>Cím:</strong> {{ kavezo.cim }}</p>
+                    <p><strong>Árkategória:</strong> {{ kavezo.arkategoriak }}</p>
+                    <p><strong>Hangulat:</strong> {{ kavezo.hangulat }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-result">Jelenleg nincsenek ajánlott kávézók.</p>
+        {% endif %}
+    </div>
+    <script>
+    document.getElementById("kereso-btn").onclick = function(){
+        let eredmenyDiv = document.getElementById("kereso-eredmeny");
+        eredmenyDiv.innerHTML = 
+          "<p style='color:#F9BE7C;text-align:center;'>Pozíció meghatározása…</p>";
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(pos){
+                fetch(`/api/ajanlott_kavezok/?lat=${pos.coords.latitude}&lng=${pos.coords.longitude}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.kavezok && data.kavezok.length > 0) {
+                            let html = '<div style="text-align:center;color:#F9BE7C;font-size:1.3rem;margin-bottom:15px;">Közeli kávézók:</div>';
+                            data.kavezok.slice(0, 10).forEach(function(kavezo){
+                                html += `
+                                    <div class="kavezo-card">
+                                        <h2>
+                                            <span style="color:#F9BE7C;">☕️ ${kavezo.nev}</span>
+                                        </h2>
+                                        <p><strong>Cím:</strong> ${kavezo.cim}</p>
+                                        ${kavezo.rating !== undefined ? `<p><strong>Értékelés:</strong> <span style="color:gold">${kavezo.rating}</span></p>` : ``}
+                                    </div>
+                                `;
+                            });
+                            eredmenyDiv.innerHTML = html;
+                        } else {
+                            eredmenyDiv.innerHTML = `<p class="no-result">Nincs találat a közeledben.</p>`;
+                        }
+                    })
+                    .catch(err=>{
+                        eredmenyDiv.innerHTML = `<p class="no-result">Nem sikerült lekérni a kávézókat.</p>`;
+                    });
+            }, function(){
+                eredmenyDiv.innerHTML = `<p class="no-result">Nem engedélyezted a helymeghatározást!</p>`;
+            });
+        } else {
+            eredmenyDiv.innerHTML = `<p class="no-result">A böngésződ nem támogatja a helymeghatározást.</p>`;
+        }
+    }
+    </script>
+</body>
+</html>

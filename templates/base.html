@@ -1,0 +1,20 @@
+<nav>
+    <!-- Bal oldali menüpontok -->
+    <ul>
+        <li><a href="{% url 'kavezok:index' %}">Kezdőlap</a></li>
+        <li><a href="{% url 'kavezok:kavezo_lista' %}">Kávézók</a></li>
+        <li><a href="{% url 'kavezok:foglalasok_lista' %}">Foglalás</a></li>
+    </ul>
+
+    <!-- Jobb oldali rész -->
+    <ul style="float: right;">
+        {% if request.user.is_authenticated %}
+            <li>Üdv, {{ request.user.username }}!</li>
+            <li><a href="{% url 'kavezok:profil' %}">Profil</a></li>
+            <li><a href="{% url 'kavezok:logout' %}">Kijelentkezés</a></li>
+        {% else %}
+            <li><a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a></li>
+            <li><a href="{% url 'kavezok:regisztracio' %}">Regisztráció</a></li>
+        {% endif %}
+    </ul>
+</nav>

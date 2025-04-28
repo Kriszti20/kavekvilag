@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ kavezo.nev }} részletei</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1f4037;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #2e443e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #F9BE7C;
+            text-align: center;
+        }
+
+        p {
+            color: #ddd;
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+
+        a {
+            color: #F9BE7C;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .kedvezmenyek-doboz {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .kedvezmeny-kartya {
+            background: #213831;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px #0002;
+            padding: 12px 18px;
+            color: #f9ecd7;
+        }
+        .kedvezmeny-fej {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2px;
+        }
+        .kedvezmeny-nev {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #ffe29e;
+        }
+        .kedvezmeny-szazalek {
+            font-weight: bold;
+            font-size: 1.2em;
+            background: #ffac43;
+            color: #213831;
+            padding: 2px 8px;
+            border-radius: 8px;
+        }
+        .kedvezmeny-idoszak {
+            font-size: 0.85em;
+            color: #e3c87a;
+            margin-bottom: 4px;
+            margin-left: 2px;
+        }
+        .kedvezmeny-leiras {
+            margin-top: 6px;
+            color: #fffbe8;
+            font-style: italic;
+            font-size: 0.98em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ kavezo.nev }}</h1>
+        <p><strong>Cím:</strong> {{ kavezo.cim }}</p>
+        <div id="google-plusz-reszletek"><!-- ide jön a Google-adat --></div>
+        <!-- Debug kiíratás: -->
+        <br>
+        <a href="{% url 'kavezok:kereso' %}">Vissza a kereséshez</a>
+    </div>
+
+    {% if kavezo.google_place_id %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function(){
+        console.log('Script indul, place_id=', "{{ kavezo.google_place_id }}");
+        fetch('/api/google_place_details/?place_id={{ kavezo.google_place_id }}')
+          .then(res => res.json())
+          .then(data => {
+            console.log('Google adatok:', data);
+            if (data.result) {
+                let html = "";
+                if (data.result.rating) {
+                  html += `<p><b>Google értékelés:</b> ⭐ ${data.result.rating} (${data.result.user_ratings_total} értékelés)</p>`;
+                }
+                if (data.result.international_phone_number) {
+                  html += `<p><b>Telefon:</b> ${data.result.international_phone_number}</p>`;
+                }
+                if (data.result.website) {
+                  html += `<p><b>Weboldal:</b> <a href="${data.result.website}" target="_blank">${data.result.website}</a></p>`;
+                }
+                if (data.result.url) {
+                  html += `<p><a href="${data.result.url}" target="_blank">Megnyitás Google Maps-ben</a></p>`;
+                }
+                if (data.result.price_level !== undefined) {
+                  const szintek = ["ingyenes", "olcsó", "közepes", "drága", "nagyon drága"];
+                  html += `<p><b>Google árszint:</b> ${szintek[data.result.price_level] || data.result.price_level}</p>`;
+                }
+                if (data.result.reviews) {
+                  html += "<p><b>Legutóbbi Google-vélemények:</b><br>";
+                  data.result.reviews.slice(0,2).forEach(r => {
+                    html += `<i>${r.author_name}</i> (${r.rating}⭐): "${r.text.substring(0,100)}..."<br>`;
+                  });
+                  html += "</p>";
+                }
+                document.getElementById("google-plusz-reszletek").innerHTML += html;
+              } else {
+              document.getElementById("google-plusz-reszletek").innerHTML = "<em>Nincs Google-infó elérhető.</em>";
+            }
+          })
+          .catch(err => {
+            document.getElementById("google-plusz-reszletek").innerHTML = "<em>(Hiba a Google-lekérdezésnél.)</em>";
+          });
+    });
+    </script>
+{% endif %}
+    <h2>Elérhető termékek</h2>
+<ul>
+        {% for termek in termekek %}
+    <li>
+        <h3>{{ termek.nev }}</h3>
+        <p><strong>Ár:</strong> {{ termek.ar }} Ft</p>
+        <p>{{ termek.leiras|default:"Nincs részletes leírás." }}</p>
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'kavezok:kosar_hozzaad' termek.id %}">
+                {% csrf_token %}
+                <button type="submit">Kosárba tesz</button>
+            </form>
+        {% else %}
+            <p>
+                <span style="color:#F9BE7C;">A kosárhoz csak bejelentkezve adhatsz hozzá terméket! </span>
+                <a href="{% url 'kavezok:bejelentkezes' %}"><b>Jelentkezz be!</b></a>
+            </p>
+        {% endif %}
+    </li>
+    {% empty %}
+        <li><p>Jelenleg nincsenek elérhető termékek.</p></li>
+    {% endfor %}
+    <div class="ertekelesek">
+        <h2>Értékelések</h2>
+        {% if ertekelesek %}
+            <ul>
+                {% for ertekeles in ertekelesek %}
+                    <li>
+                        <strong>{{ ertekeles.felhasznalo }}</strong> ({{ ertekeles.pontszam }} csillag)
+                        <p>{{ ertekeles.megjegyzes }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Még nincsenek értékelések.</p>
+        {% endif %}
+    </div>
+
+    <div class="ertekeles-form">
+        {% if user.is_authenticated %}
+            <h2>Értékelés hozzáadása</h2>
+            <form method="post">
+                {% csrf_token %}
+                <label for="pontszam">Értékelés:</label>
+                <select id="pontszam" name="pontszam">
+                    <option value="5">5 - Kiváló</option>
+                    <option value="4">4 - Jó</option>
+                    <option value="3">3 - Átlagos</option>
+                    <option value="2">2 - Gyenge</option>
+                    <option value="1">1 - Rossz</option>
+                </select>
+            
+                <label for="megjegyzes">Értékelés szövege:</label>
+                <textarea id="megjegyzes" name="megjegyzes" rows="5" placeholder="Írd meg az értékelésed..."></textarea>
+            
+                <button type="submit">Küldés</button>
+            </form>
+        {% else %}
+            <p>Kérlek, <a href="{% url 'kavezok:bejelentkezes' %}">jelentkezz be</a>, hogy értékelhess!</p>
+        {% endif %}
+    </div>
+    <h2>Kedvezmények</h2>
+{% if kedvezmenyek %}
+<div class="kedvezmenyek-doboz">
+    {% for kedvezmeny in kedvezmenyek %}
+        <div class="kedvezmeny-kartya">
+            <div class="kedvezmeny-fej">
+                <span class="kedvezmeny-nev">{{ kedvezmeny.nev }}</span>
+                <span class="kedvezmeny-szazalek">-{{ kedvezmeny.ar_szazalek }}%</span>
+            </div>
+            <div class="kedvezmeny-idoszak">
+                <small>Érvényes: {{ kedvezmeny.ervenyes_tol|date:"Y.m.d" }} – {{ kedvezmeny.ervenyes_ig|date:"Y.m.d" }}</small>
+            </div>
+            {% if kedvezmeny.leiras %}
+                <div class="kedvezmeny-leiras">{{ kedvezmeny.leiras }}</div>
+            {% endif %}
+            
+        </div>
+    {% endfor %}
+</div>
+{% else %}
+    <p>Nincs aktív kedvezmény ennél a kávézónál.</p>
+{% endif %}
+    
+</ul>
+</body>
+</html>

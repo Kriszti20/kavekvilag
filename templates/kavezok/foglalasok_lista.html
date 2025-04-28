@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A foglalásaim</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Oldalstílus */
+        body {
+            margin: 0;
+            font-family: 'Georgia', serif;
+            background-color: #1f4037;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+            color: #dfa26f;
+            margin-top: 30px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        li {
+            background-color: #1c2824;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        li:first-child {
+            margin-top: 20px;
+        }
+
+        li:last-child {
+            margin-bottom: 20px;
+        }
+
+        li p {
+            margin: 5px 0;
+        }
+
+        p {
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        a {
+            color: #d59a6f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #cf9775;
+        }
+
+        /* Fejléc */
+        header {
+            background-color: #1c2824;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        header .logo {
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+        }
+
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        header nav a:hover {
+            color: #cf9775;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1c2824;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fejléc -->
+    <header>
+        <div class="logo">Kávék világa</div>
+        <nav>
+            <a href="/">Kezdőlap</a>
+            <a href="#kavezok">Kávézók</a>
+            <a href="#rolunk">Rólunk</a>
+            <a href="#kapcsolat">Kapcsolat</a>
+            <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
+        </nav>
+    </header>
+
+    <!-- Foglalások -->
+
+    <h2>Foglalásaim</h2>
+    <div class="foglalas-lista">
+        {% for foglalas in foglalasok %}
+            <div class="foglalas-card">
+                <p><strong>Kávézó:</strong> {{ foglalas.kavezo.nev }}</p>
+                <p><strong>Dátum:</strong> {{ foglalas.datum|date:"Y. m. d. H:i" }}</p>
+                <p><strong>Személyek száma:</strong> {{ foglalas.szemelyek_szama }}</p>
+                <p><strong>Megjegyzés:</strong> {{ foglalas.megjegyzes|default:"-" }}</p>
+            </div>
+        {% empty %}
+            <p>Nincs foglalásod.</p>
+        {% endfor %}
+    </div>
+    <footer>
+        <p>Kávék világa © 2023. Minden jog fenntartva. | Kapcsolat: info@kavekvilaga.hu</p>
+    </footer>
+</body>
+</html>

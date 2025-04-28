@@ -1,0 +1,21 @@
+<h1>{{ kavezo.nev }} Termékei</h1>
+
+{% if termekek %}
+    <form method="post" action="{% url 'kavezok:rendeles_letrehozas' kavezo.id %}">
+        {% csrf_token %}
+        <ul>
+            {% for termek in termekek %}
+                <li>
+                    <input type="checkbox" name="termekek" value="{{ termek.id }}" id="termek{{ termek.id }}">
+                    <label for="termek{{ termek.id }}">
+                        <strong>{{ termek.nev }}</strong> - {{ termek.ar }} Ft<br>
+                        <em>{{ termek.leiras|default:"Nincs leírás" }}</em>
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="submit">Rendelés leadása</button>
+    </form>
+{% else %}
+    <p>Jelenleg nincsenek elérhető termékek ebben a kávézóban.</p>
+{% endif %}

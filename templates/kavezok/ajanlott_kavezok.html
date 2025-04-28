@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajánlott kávézók</title>
+    <link href="https://fonts.googleapis.com/css2?family=Georgia:wght@400;%2,700&family=Arial:wght@400;%2C700&display=swap" rel="stylesheet">
+    <style>
+        /* Alapstílusok */
+        body {
+            margin: 0;
+            font-family: 'Georgia', serif;
+            background-color: #1f4037;
+            color: white;
+            overflow-x: hidden;
+        }
+        h1, h2, p {
+            margin: 0;
+        }
+
+        /* Fejléc */
+        header {
+            background-color: #1c2824;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        header nav a:hover {
+            color: #cf9775; /* Világosbarna árnyalat */
+        }
+        header .logout-form {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        header .logout-form button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        header .logout-form button:hover {
+            color: #cf9775;
+        }
+
+        /* Tartalomszakasz */
+        main {
+            padding: 50px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: left;
+            font-family: 'Arial', sans-serif;
+        }
+        main h1 {
+            color: #dfa26f;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        main ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        main li {
+            background-color: #1e2e2c;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #e4e4e4;
+            transition: transform 0.2s;
+        }
+
+        main li:hover {
+            transform: translateY(-5px);
+            background-color: #253e3a;
+        }
+
+        main li h2 {
+            color: #cf9775;
+        }
+        main li p {
+            margin: 10px 0;
+        }
+
+        /* Lábjegyzet */
+        footer {
+            background-color: #1c2824;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        footer a {
+            color: #dfa26f;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ajánlott kávézók</h1>
+        <nav>
+            <a href="/">Kezdőlap</a>
+            <a href="#kavezok">Kávézók</a>
+            <a href="#rolunk">Rólunk</a>
+            <a href="#kapcsolat">Kapcsolat</a>
+            <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+            {% if user.is_authenticated %}
+                <div class="user-info">
+                    <a href="{% url 'kavezok:profil' %}"><span>Bejelentkezve: {{ user.username }}</span></a>
+                    <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit">Kijelentkezés</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'kavezok:login' %}">Bejelentkezés</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        <h1>Ajánlott kávézók</h1>
+        <ul>
+            {% if ajanlott_kavezok %}
+                {% for kavezo in ajanlott_kavezok %}
+                    <li>
+                            <a href="{% url 'kavezok:kavezo_reszletek' kavezo.id %}" style="color: #F9BE7C; text-decoration: none;">
+                                {{ kavezo.nev }}
+                            </a>
+                        <p><strong>Cím:</strong> {{ kavezo.cim }}</p>
+                        <p><strong>Hangulat:</strong> {{ kavezo.hangulat }}</p>
+                        <p><strong>Árkategória:</strong> {{ kavezo.arkategoriak }}</p>
+                        
+                    </li>
+                {% endfor %}
+            {% else %}
+                <p>Nincsenek elérhető ajánlások.</p>
+            {% endif %}
+        </ul>
+    </main>
+
+    <footer>
+        <p>© 2023 Kávézó Ajánló | <a href="#kapcsolat">Kapcsolat</a></p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,234 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kávék világa</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Alapstílusok */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #1f4037; /* Sötétzöld alap */
+            overflow-x: hidden; /* Elkerüljük a vízszintes scrollozást */
+            font-family: 'Georgia', serif;
+        }
+        h1, h2, p {
+            margin: 0;
+        }
+
+        /* Fejléc */
+        header {
+            background-color: #1c2824;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-family: 'Georgia', serif;
+        }
+
+        header .logo {
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+        }
+
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        header nav a:hover {
+            color: #cf9775; /* Világosbarna árnyalat */
+        }
+
+        /* Hero - főszakasz */
+        .hero {
+            position: relative; /* A körök és a tartalom pozícionálása */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: white;
+            padding: 40px;
+        }
+
+        .hero .text-content {
+            z-index: 2; /* Tartalom a körök felett legyen */
+            max-width: 50%;
+            position: center;
+            text-align: center;
+            font-family: 'Georgia', serif;
+
+        }
+
+        .hero h2 {
+            font-size: 4rem;
+            color: #dfa26f; /* Kávészín */
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .hero .cta-button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            background-color: #d59a6f; /* Barna kontraszt */
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            font-family: 'Georgia', serif;
+        }
+
+        .hero .cta-button:hover {
+            background-color: #c88b5f;
+            transform: translateY(-5px);
+        }
+
+        .hero img {
+            z-index: 2; /* Kép a körök előtt legyen */
+            max-width: 200px;
+            border-radius: 20px;
+            position: relative;
+        }
+        header .logout-form {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        header .logout-form button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        header .logout-form button:hover {
+            color: #cf9775;
+        }
+
+        /* Körök - lebegés háttérben */
+        .blob {
+            position: absolute;
+            background-color: #dfa26f;
+            border-radius: 50%;
+            opacity: 0.6;
+            z-index: 1; 
+        }
+
+        .blob-1 {
+            width: 200px;
+            height: 200px;
+            top: 0px;
+            left: -50px;
+        }
+        .blob-2 {
+            width: 200px;
+            height: 200px;
+            top: 50px;
+            left: 1250px;
+        }
+        .blob-3 {
+            width: 450px;
+            height: 450px;
+            bottom: -50px;
+            right: -100px;
+        }
+        .blob-4 {
+            width: 400px;
+            height: 400px;
+            top: 350px;
+            bottom: 50px;
+            right: 1200px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1c2824;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        .latte{
+            top: 40%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fejléc -->
+    <header>
+        <div class="logo">Kávék világa</div>
+        <nav>
+            <a href="/">Kezdőlap</a>
+            <a href="#kavezok">Kávézók</a>
+            <a href="#rolunk">Rólunk</a>
+            <a href="#kapcsolat">Kapcsolat</a>
+            <nav>
+                <!-- egyéb menüpontok -->
+                <a href="{% url 'kavezok:kosar_megjelenitese' %}">🛒 Kosár</a>
+            </nav>
+            <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+            {% if user.is_authenticated %}
+                <div class="user-info">
+                    <a href="{% url 'kavezok:profil' %}"><span>Bejelentkezve: {{ user.username }}</span></a>
+                    <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit">Kijelentkezés</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <!-- Hero szakasz -->
+    <section class="hero">
+        <!-- Háttér körök -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+
+        <div class="text-content">
+            <h2>Fedezd fel a kávék világát</h2>
+            <p>Green Brown Modern Blob Coffee & Eatery - Kávéélmény minden ínyenc számára.</p>
+            <button class="cta-button" onclick="window.location.href='/kereso/'">Kezdés</button>
+        </div>
+        <!-- <img src="{% static 'images/latte-art.jpg' %}" class="latte" alt="Kávé Csésze Latte Art"> -->
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Kávék világa © 2023. Minden jog fenntartva. | Kapcsolat: info@kavekvilaga.hu</p>
+    </footer>
+</body>
+</html>

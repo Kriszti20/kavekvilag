@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kávék világa - Szerencsekerék</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            margin: 0;
+            background-color: #1f4037;
+            font-family: 'Georgia', serif;
+        }
+        header {
+            background-color: #1c2824;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        header .logo { font-size: 1.8rem; font-family: 'Georgia', serif; font-weight: bold; }
+        header nav { display: flex; gap: 20px; }
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        header nav a:hover { color: #cf9775; }
+        header .logout-form { display: inline-block; margin-left: 10px; }
+        header .logout-form button {
+            background: none; border: none; color: white; font-size: 1rem; font-family: 'Georgia', serif;
+            cursor: pointer; text-decoration: underline;
+        }
+        header .logout-form button:hover { color: #cf9775; }
+        .user-info { display: inline-block; margin-left:15px; }
+        .wheel-main-content {
+            min-height: 90vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+        .wheel-container {
+            background: #fff3e0;
+            padding: 36px 18px;
+            border-radius: 32px;
+            box-shadow: 0 6px 20px #1c282499;
+            margin-top: 30px;
+        }
+        .wheel-canvas-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .wheel-pointer {
+            position: absolute;
+            top: -27px; left: 50%;
+            width: 0; height: 0;
+            border-left: 18px solid transparent;
+            border-right: 18px solid transparent;
+            border-top: 27px solid #e65100;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+
+        #spin-btn {
+            margin-top:25px;padding:12px 40px;border:none;border-radius:50px;background:#dfa26f;
+            color:#fff;font-size:1.3rem;font-family:'Georgia',serif;cursor:pointer;font-weight:bold;
+            box-shadow:0px 4px 16px #0002;transition:background 0.3s;
+        }
+        #spin-btn[disabled] {
+            background: #bbb !important;
+            cursor: not-allowed !important;
+            color: #eee !important;
+        }
+        footer {
+            background-color: #1c2824;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Kávék világa</div>
+        <nav>
+            <a href="/">Kezdőlap</a>
+            <a href="#kavezok">Kávézók</a>
+            <a href="#rolunk">Rólunk</a>
+            <a href="#kapcsolat">Kapcsolat</a>
+            <a href="{% url 'kavezok:kosar_megjelenitese' %}">🛒 Kosár</a>
+            <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+            {% if user.is_authenticated %}
+            <div class="user-info">
+                <a href="{% url 'kavezok:profil' %}"><span>Bejelentkezve: {{ user.username }}</span></a>
+                <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit">Kijelentkezés</button>
+                </form>
+            </div>
+            {% else %}
+                <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <div class="wheel-main-content">
+        <h2 style="color: #dfa26f; margin-top:30px; margin-bottom:10px;">PontSzerencsekerék</h2>
+        <p style="color:#fffbe6;">Pörgesd meg naponta egyszer, és nyerj!</p>
+        <div class="wheel-container">
+            <div class="wheel-canvas-container">
+                <canvas id="wheel" width="300" height="300"></canvas>
+                <div class="wheel-pointer"></div>
+            </div>
+            <button id="spin-btn"
+                {% if not can_spin %}disabled{% endif %}>
+                {% if can_spin %}
+                    Pörgesd meg!
+                {% else %}
+                    Már ma pörgettél! Gyere vissza holnap! ☕
+                {% endif %}
+            </button>
+        </div>
+        <div style="margin-top:38px; font-size:18px; color:#fff; text-align:center;">
+            Jelenlegi pontjaid: <b>{{ current_points }}</b>
+        </div>
+    </div>
+
+    <footer>
+        <p>Kávék világa © 2023. Minden jog fenntartva. | Kapcsolat: info@kavekvilaga.hu</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- ALAP ADATOK ---
+            const points = {{ points_list|safe }};
+            const colors = ['#dfa26f', '#f6b73d', '#388e3c', '#fff3e0', '#c88b5f', '#b0a990'];
+            const wheel = document.getElementById('wheel');
+            if (!wheel) return;
+            const ctx = wheel.getContext('2d');
+            const size = wheel.width;
+            const slices = points.length;
+        
+            function drawWheel(angleOffset = 0) {
+                ctx.clearRect(0, 0, size, size);
+                for (let i = 0; i < slices; i++) {
+                    // Szelet megrajzolása
+                    ctx.beginPath();
+                    ctx.moveTo(size / 2, size / 2);
+                    ctx.arc(
+                        size / 2, size / 2, size / 2,
+                        ((2 * Math.PI) / slices) * i + angleOffset,
+                        ((2 * Math.PI) / slices) * (i + 1) + angleOffset
+                    );
+                    ctx.closePath();
+                    ctx.fillStyle = colors[i % colors.length];
+                    ctx.fill();
+        
+                    // Szelet felirat
+                    let midAngle = ((2 * Math.PI) / slices) * (i + 0.5) + angleOffset;
+                    let r = size / 2 * 0.68;
+                    let x = size / 2 + Math.cos(midAngle) * r;
+                    let y = size / 2 + Math.sin(midAngle) * r + 5;
+                    ctx.save();
+                    ctx.fillStyle = "#222";
+                    ctx.font = "bold 20px Georgia,serif";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("+" + points[i], x, y);
+                    ctx.restore();
+                }
+            }
+            drawWheel(0);
+        
+            // --- PÖRGETÉS ANIMÁCIÓ ---
+            const spinBtn = document.getElementById('spin-btn');
+            let animRunning = false;
+            if (spinBtn) {
+                spinBtn.type = "button";
+                spinBtn.addEventListener('click', function() {
+                    if (animRunning || spinBtn.disabled) return;
+                    animRunning = true;
+                    spinBtn.disabled = true;
+        
+                    // AJAX POST a szerverre
+                    fetch(window.location.pathname, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": "{{ csrf_token }}",
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        let spins = data.points_index;
+                        let sliceAngle = 2 * Math.PI / slices;
+                        let extraRounds = 6;
+                        // >>> RANDOM OFFSET a középponton belül
+                        let randOffset = (Math.random() - 0.5) * sliceAngle * 0.55;
+                        let pointerAngle = -Math.PI/2; // felfelé mutat a pointer!
+                        let sliceCenter = (spins + 0.5) * sliceAngle;
+                        let targetAngle = 2 * Math.PI * extraRounds + pointerAngle - sliceCenter + randOffset;
+                    
+                        let duration = 3200;
+                        let start = null;
+                        function animateWheel(ts) {
+                            if (!start) start = ts;
+                            let elapsed = ts - start;
+                            let progress = Math.min(elapsed / duration, 1);
+                            let ease = 1 - Math.pow(1 - progress, 3);
+                            let angle = ease * targetAngle;
+                            drawWheel(angle);
+                            if (progress < 1) {
+                                requestAnimationFrame(animateWheel);
+                            } else {
+                                setTimeout(() => {
+                                    alert(`Nyereményed: +${points[spins]} pont.\nJelenlegi pontjaid: ${data.current_points}`);
+                                    location.reload();
+                                }, 800);
+                            }
+                        }
+                        requestAnimationFrame(animateWheel);
+                    });
+                });
+            }
+        });
+        </script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil oldal</title>
+    <style>
+        /* Általános stílusok */
+        body {
+            margin: 0;
+            font-family: 'Georgia', serif;
+            background-color: #183930;
+            color: #f0f0f0;
+        }
+
+        header {
+            background-color: #1c2824;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        header .logo {
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+        }
+
+        header nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        header nav a:hover {
+            color: #cf9775;
+        }
+
+        header .user-info {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #f0f0f0;
+        }
+        header .logout-form {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        header .logout-form button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        header .logout-form button:hover {
+            color: #cf9775;
+        }
+
+
+        .profil-container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background-color: #2d4239;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .profil-container h1 {
+            font-size: 2rem;
+            color: #cf9775;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Foglalás és rendelés szekció */
+        h2 {
+            text-align: center;
+            color: #cf9775;
+            margin: 1.5rem 0;
+        }
+
+        .foglalas, .rendeles {
+            margin: 1rem auto;
+            padding: 1rem;
+            background-color: #324841;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+        }
+
+        .foglalas p, .rendeles p {
+            margin: 0.5rem 0;
+        }
+
+        .foglalas strong, .rendeles strong {
+            color: #cf9775;
+        }
+
+        .kavezo-link {
+            text-decoration: none;
+            color: #cf9775;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .kavezo-link:hover {
+            color: #b17d43;
+            text-decoration: underline;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        ul li a {
+            color: #cf9775;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        ul li a:hover {
+            text-decoration: underline;
+            color: #b17d43;
+        }
+
+
+        .checkin-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 48px auto 32px auto;
+            width: 100%; /* esetleg max-width: 420px; */
+        }
+        
+        .checkin-week-row {
+            display: flex;
+            gap: 13px;
+            justify-content: center;
+            margin-bottom: 18px;
+            margin-top: 0;
+        }
+        
+        .checkin-week-day {
+            width: 56px;
+            height: 56px;
+            background: #fff;
+            border-radius: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #eee;
+            box-shadow: 0 2px 4px rgba(0,0,0,.07);
+            font-size: 13px;
+            color: #aaa;
+            transition: 0.2s;
+            font-weight: normal;
+        }
+        
+        .checkin-week-day.today {
+            border-color: #f8b867;
+            background: #fffbe6;
+            color: #222;
+            font-weight: bold;
+            box-shadow: 0 0 7px #ffe1a0;
+        }
+        
+        .checkin-week-day.checked {
+            background: #49c7622b; /* zöldes háttér */
+            border-color: #49c762;
+            color: #49c762;
+            font-weight: bold;
+        }
+        
+        .day-points {
+            font-size: 15px;
+            font-weight: bold;
+            color: #f6b73d;
+            margin-bottom: 5px;
+        }
+        
+        .checkin-week-day.checked .day-points {
+            color: #49c762;
+        }
+        .checkin-week-day.today .day-points {
+            color: #f6b73d;
+        }
+        
+        .day-date {
+            font-size: 11px;
+            color: #aaa;
+        }
+        .checkin-week-day.today .day-date {
+            color: #f8b867;
+        }
+        
+        .checkin-btn {
+            background: #f8b867;
+            border: none;
+            padding: 12px 36px;
+            margin-top: 10px;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #222;
+            cursor: pointer;
+            box-shadow: 0 1px 7px rgba(0,0,0,.05);
+            transition: background 0.2s;
+        }
+        
+        .checkin-btn[disabled] {
+            background: #fff3;
+            color: #aaa;
+            cursor: default;
+        }
+        
+        .checkin-streak {
+            margin-top: 7px;
+            color: #bbb;
+            text-align: center;
+            font-size: 15px;
+        }
+             
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Kávék világa</div>
+        <nav>
+            <a href="/">Kezdőlap</a>
+            <a href="#kavezok">Kávézók</a>
+            <a href="#rolunk">Rólunk</a>
+            <a href="#kapcsolat">Kapcsolat</a>
+            <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+            {% if user.is_authenticated %}
+                <div class="user-info">
+                    <a href="{% url 'kavezok:profil' %}"><span>Bejelentkezve: {{ user.username }}</span></a>
+                    <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit">Kijelentkezés</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'kavezok:login' %}">Bejelentkezés</a>
+            {% endif %}
+        </nav>
+    </header>
+    <div class="profil-container">
+        <h1>Üdvözlünk, {{ user.username }}!</h1>
+        <p>Jelenlegi pontjaid: <strong>{{ user.profil.total_points|default:"nincs" }}</strong></p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Név:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+        <p>
+            <a href="{% url 'kavezok:profil_szerkesztes' %}">Profil szerkesztése</a>
+        </p>
+    </div>
+    <div>
+        <b>WEEK DAYS teszt:</b> {{ week_days }}<br>
+        <b>CHECKED teszt:</b> {{ checked_days }}<br>
+        <b>PONTOK teszt:</b> {{ pontok_hetre }}<br>
+      </div>
+    <div class="checkin-container">
+        <div class="checkin-week-row">
+            {% for day in week_days %}
+                <div class="checkin-week-day
+                    {% if day == today %} today{% endif %}
+                    {% if day in checked_days %} checked{% endif %}">
+                    <div class="day-points">
+                        +{{ pontok_hetre|slice:forloop.counter0|stringformat:"d" }}
+                    </div>
+                    <div class="day-date">
+                        {% if day == today %}Ma{% else %}{{ day|date:"m.d" }}{% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <form method="post" action="{% url 'kavezok:checkin' %}">
+            {% csrf_token %}
+                <button class="checkin-btn"
+                        type="submit"
+                        {% if today in checked_days %} disabled {% endif %}>
+                    {% if today in checked_days %}
+                        Már bejelentkeztél ma!
+                    {% else %}
+                        Mai check-in! (+{{ pont_ma }} pont)
+                    {% endif %}
+                </button>
+        </form>
+        <div class="checkin-streak">
+            Sorozat: <b>{{ streak }}</b> nap
+        </div>
+    </div>
+    <h2>Foglalásaim</h2>
+    {% for foglalas in foglalasok %}
+        <p><strong>Kávézó:</strong> {{ foglalas.kavezo.nev }}</p>
+        <p><strong>Dátum:</strong> {{ foglalas.datum }}</p>
+        <p><strong>Személyek száma:</strong> {{ foglalas.szemelyek_szama }}</p>
+        <p><strong>Megjegyzés:</strong> {{ foglalas.megjegyzes }}</p>
+    {% empty %}
+        <p>Nincs foglalásod.</p>
+    {% endfor %}
+
+    <h2>Rendeléseid</h2>
+    {% for rendeles in rendelesek %}
+        <div class="rendeles">
+            <p><strong>Dátum:</strong> {{ rendeles.datum }}</p>
+            <p><strong>Rendelt termékek:</strong></p>
+            <ul>
+                {% for tetel in rendeles.tetel_lista.all %}
+                    <li>
+                        {{ tetel.termek.nev }} - {{ tetel.termek.ar }} Ft
+                        (<a href="{% url 'kavezok:kavezo_reszletek' tetel.termek.kavezo.id %}" class="kavezo-link">
+                            {{ tetel.termek.kavezo.nev }}
+                        </a>)
+                    </li>
+                {% empty %}
+                    <li><em>Nincs termék.</em></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+
+    <h2>Saját értékeléseid</h2>
+    {% if ertekelesek %}
+      <ul>
+        {% for ertekeles in ertekelesek %}
+          <li>
+            <a href="{% url 'kavezok:kavezo_reszletek' kavezo_id=ertekeles.kavezo.id %}">
+                <strong>{{ ertekeles.kavezo.nev }}</strong>
+            </a>
+            ({{ ertekeles.pontszam }} csillag) <br>
+            {{ ertekeles.megjegyzes }}
+            <br><small>{{ ertekeles.datum|date:"Y.m.d H:i" }}</small>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Még nem értékeltél egyetlen helyet sem.</p>
+    {% endif %}
+
+</body>
+</html>
+

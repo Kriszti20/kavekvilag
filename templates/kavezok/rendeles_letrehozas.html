@@ -1,0 +1,14 @@
+<h2>Rendelés leadása a {{ kavezo.nev }} kávézóban</h2>
+<form method="POST">
+    {% csrf_token %}
+    <p>Válaszd ki a termékeket:</p>
+    <ul>
+        {% for termek in termekek %}
+            <li>
+                <input type="checkbox" id="termek_{{ termek.id }}" name="termekek" value="{{ termek.id }}">
+                <label for="termek_{{ termek.id }}">{{ termek.nev }} - {{ termek.ar }} Ft</label>
+            </li>
+        {% endfor %}
+    </ul>
+    <button type="submit">Rendelés leadása</button>
+</form>

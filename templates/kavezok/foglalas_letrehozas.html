@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Új foglalás létrehozása</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Globális alapstílusok */
+        body {
+            margin: 0;
+            font-family: 'Georgia', serif;
+            background-color: #1f4037; /* Sötétzöld alap */
+            color: white;
+        }
+        
+        /* Fejléc stílusok */
+        header {
+            padding: 15px 30px;
+            background-color: #1c2824;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        header .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        header nav {
+            display: flex;
+            align-items: center; /* Középre igazítás függőlegesen */
+            gap: 20px; /* Távolság a menüpontok között */
+        }
+        
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: color 0.3s ease;
+            font-weight: bold;
+        }
+        
+        header nav a:hover {
+            color: #dfa26f; /* Kávébarna hover */
+        }
+        
+        /* Felhasználói információ része */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Távolság a szöveg és a gomb között */
+            font-size: 1rem;
+            color: white;
+        }
+        
+        header .logout-form {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        header .logout-form button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        header .logout-form button:hover {
+            color: #cf9775;
+        }
+
+        /* Foglalás (form) szekció */
+        /* Foglalás szakasz */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Biztosítsa a teljes magasságot */
+}
+
+.form-box {
+    background-color: #1c2824; /* Doboz háttérszíne */
+    padding: 20px 30px; /* Kevesebb belső tér (padding) */
+    border-radius: 10px; /* Enyhén lekerekített sarkok */
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.3); /* Finom árnyék */
+    max-width: 450px; /* Maximális szélesség */
+    width: 100%; /* Mobilbarát szélesség */
+    box-sizing: border-box; /* Padding befolyásolja a szélességet */
+}
+        
+        .form-box h1 {
+            color: #dfa26f; /* Kávébarna szín */
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        
+        /* Űrlap */
+        .form-box form {
+            display: flex;
+            flex-direction: column;
+            gap: 2px; /* Távolság a mezők között */
+        }
+        
+        .form-box label {
+            font-weight: bold;
+            color: #cf9775;
+        }
+        
+        /* Mezők */
+        .form-box input, 
+        .form-box select, 
+        .form-box textarea {
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid #cf9775;
+            border-radius: 5px;
+            background-color: #f3f3f3;
+            color: #333;
+            width: 100%;
+            box-sizing: border-box; /* Tartalmazza a paddingot */
+        }
+        
+        /* Speciális textarea stílus */
+        .form-box textarea {
+            resize: vertical; /* Csak függőlegesen átméretezhető */
+            min-height: 20px; /* Kényelmes íráshoz */
+            max-height: 40px; /* Limit, hogy ne legyen túl nagy */
+        }
+        
+        /* Gombok */
+        .form-box button {
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            background-color: #d59a6f;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .form-box button:hover {
+            background-color: #c88b5f;
+            transform: translateY(-5px); /* Finom kiemelkedés hoverkor */
+        }
+
+        
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Kávék világa</div>
+        <nav>
+            <a href="/">Kezdőlap</a>
+            <a href="#kavezok">Kávézók</a>
+            <a href="#rolunk">Rólunk</a>
+            <a href="#kapcsolat">Kapcsolat</a>
+            {% if user.is_authenticated %}
+            <div class="user-info">
+                <span>Bejelentkezve: {{ user.username }}</span>
+                <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit">Kijelentkezés</button>
+                </form>
+            </div>
+        {% else %}
+            <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
+        {% endif %}
+        </nav>
+    </header>
+    <!-- Foglalás szakasz -->
+    <div class="form-container">
+        <div class="form-box">
+            <h1>Új foglalás</h1>
+            {% if user.is_authenticated %}
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Foglalás mentése</button>
+                </form>
+            {% else %}
+                <div class="alert alert-warning" style="color:#F9BE7C; font-weight:bold;">
+                    Foglaláshoz <a href="{% url 'kavezok:bejelentkezes' %}">jelentkezz be</a>!
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Kávék világa © 2023. Minden jog fenntartva. | Kapcsolat: info@kavekvilaga.hu</p>
+    </footer>
+</body>
+</html>
+
