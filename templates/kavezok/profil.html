@@ -250,9 +250,11 @@
         <div class="logo">Kávék világa</div>
         <nav>
             <a href="/">Kezdőlap</a>
-            <a href="#kavezok">Kávézók</a>
-            <a href="#rolunk">Rólunk</a>
-            <a href="#kapcsolat">Kapcsolat</a>
+            <a href="{% url 'kavezok:kereso' %}">Kávézók</a>
+            <nav>
+                <!-- egyéb menüpontok -->
+                <a href="{% url 'kavezok:kosar_megjelenitese' %}">🛒 Kosár</a>
+            </nav>
             <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
             {% if user.is_authenticated %}
                 <div class="user-info">
@@ -263,7 +265,7 @@
                     </form>
                 </div>
             {% else %}
-                <a href="{% url 'kavezok:login' %}">Bejelentkezés</a>
+                <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
             {% endif %}
         </nav>
     </header>

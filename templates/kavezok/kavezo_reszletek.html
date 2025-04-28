@@ -6,13 +6,78 @@
     <title>{{ kavezo.nev }} részletei</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             background-color: #1f4037;
-            color: #ffffff;
+            color: white;
+            font-family: 'Georgia', serif;
             margin: 0;
-            padding: 0;
         }
+        header {
+            background-color: #1c2824;
+            padding: 13px 30px 13px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 2px 10px #0001;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #ffe29e;
+        }
+        
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+        
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.02rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.18s, color 0.2s;
+        }
+        
 
+        
+        .user-info {
+            margin-left: 26px;
+            color: #fee8b2;
+            font-weight: 600;
+            font-size: 1.01rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .logout-form {
+            display: inline;
+            margin-left: 8px;
+        }
+        .logout-form button {
+            background: none;
+            border: none;
+            color: #ffe2aa;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: inherit;
+            padding: 2px 5px;
+            border-radius: 3px;
+            transition: color 0.18s, background 0.15s;
+        }
+        .logout-form button:hover {
+            background: #ffe8cd;
+            color: #a77040;
+        }
+        
         .container {
             max-width: 800px;
             margin: 50px auto;
@@ -21,28 +86,28 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
-
+        
         h1 {
             color: #F9BE7C;
             text-align: center;
         }
-
+        
         p {
             color: #ddd;
             font-size: 1.1rem;
             margin: 10px 0;
         }
-
+        
         a {
             color: #F9BE7C;
             text-decoration: none;
             font-weight: bold;
         }
-
-        a:hover {
-            text-decoration: underline;
+        
+        nav a:hover {
+            color: #cf9775;
         }
-
+        
         .kedvezmenyek-doboz {
             display: flex;
             flex-direction: column;
@@ -90,6 +155,29 @@
     </style>
 </head>
 <body>
+    <header>
+        <div class="logo">Kávék világa</div>
+        <nav>
+            <a href="/">Kezdőlap</a>
+            <a href="{% url 'kavezok:kereso' %}">Kávézók</a>
+            <nav>
+                <!-- egyéb menüpontok -->
+                <a href="{% url 'kavezok:kosar_megjelenitese' %}">🛒 Kosár</a>
+            </nav>
+            <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+            {% if user.is_authenticated %}
+                <div class="user-info">
+                    <a href="{% url 'kavezok:profil' %}"><span>Bejelentkezve: {{ user.username }}</span></a>
+                    <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit">Kijelentkezés</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
+            {% endif %}
+        </nav>
+    </header>
     <div class="container">
         <h1>{{ kavezo.nev }}</h1>
         <p><strong>Cím:</strong> {{ kavezo.cim }}</p>

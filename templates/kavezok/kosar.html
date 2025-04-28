@@ -15,6 +15,8 @@
         color: white;
         overflow-x: hidden;
     }
+    
+    /* --- FEJLÉC, MENÜ --- */
     header {
         background-color: #1c2824;
         padding: 15px 30px;
@@ -25,6 +27,7 @@
     }
     header .logo {
         font-size: 2rem;
+        font-family: 'Georgia', serif;
         font-weight: bold;
         letter-spacing: 1px;
     }
@@ -49,10 +52,14 @@
     }
     header .user-info a,
     header .user-info span {
-        color: #dfa26f;
+        color: #fff;
         font-weight: bold;
         text-decoration: none;
         font-size: 1rem;
+    }
+    
+    header .user-info a:hover {
+        color: #dfa26f;
     }
     header .logout-form {
         display: inline-block;
@@ -61,23 +68,26 @@
     header .logout-form button {
         background: none;
         border: none;
-        color: #dfa26f;
+        color: #fff;
         font-size: 1rem;
         font-family: 'Georgia', serif;
         cursor: pointer;
         text-decoration: underline;
+        transition: color 0.18s;
     }
     header .logout-form button:hover {
         color: #cf9775;
     }
+    
+    /* --- KOSÁR KONTAINER --- */
     .cart-container {
-      background: #25423a;
-      padding: 32px 20px 26px 20px;
-      border-radius: 18px;
-      box-shadow: 0 4px 16px #0003;
-      margin: 48px auto 0 auto;
-      max-width: 980px; /* SZÉLESEBB! */
-  }
+        background: #25423a;
+        padding: 32px 20px 26px 20px;
+        border-radius: 18px;
+        box-shadow: 0 4px 16px #0003;
+        margin: 48px auto 0 auto;
+        max-width: 980px;
+    }
     .cart-container h2 {
         color: #dfa26f;
         margin-bottom: 24px;
@@ -85,10 +95,12 @@
         font-family: 'Georgia', serif;
         font-size: 2rem;
     }
+    
+    /* --- FIGYELMEZTETÉS --- */
     .custom-alert-warning {
         background: linear-gradient(95deg, #f78a57 60%, #ffe5c4 100%);
         color: #3d2107;
-        padding: 13px 0 13px 0;
+        padding: 13px 0;
         border-radius: 8px;
         font-size: 1.1em;
         font-family: 'Georgia', serif;
@@ -103,6 +115,8 @@
         max-width: 100%;
         box-sizing: border-box;
     }
+    
+    /* --- TÁBLÁZATOS KOSÁR --- */
     .cart-table {
         width: 100%;
         border-collapse: collapse;
@@ -110,23 +124,16 @@
         background: #20362c;
         border-radius: 10px;
         overflow: hidden;
-        font-family: 'Arial', sans-serif;
-        table-layout: fixed;   /* hogy a min-width-ek számítsanak */
+        font-family: 'Georgia', serif;
+        table-layout: fixed;
     }
     .cart-table th, .cart-table td {
-        padding: 16px 10px;     /* nagyobb padding */
+        padding: 16px 10px;
         text-align: center;
         color: #ffe0ad;
-        font-size: 1.17em;      /* nagyobb betűméret */
+        font-size: 1.17em;
         word-break: break-word;
     }
-
-    .cart-table td form {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      align-items: center;
-  }
     .cart-table th {
         background: #1e2e2c;
         color: #ffe0ad;
@@ -144,74 +151,82 @@
         font-size: 1.15em;
         color: #ffd488;
     }
-    /* Oszlopokon fix méret */
+    .cart-table td form {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+    }
+    /* Oszlopok min. szélességgel */
     .cart-table th:nth-child(1), .cart-table td:nth-child(1) { min-width: 120px; }
-.cart-table th:nth-child(2), .cart-table td:nth-child(2) { min-width: 140px; }
-.cart-table th:nth-child(3), .cart-table td:nth-child(3) { min-width: 115px; }
-.cart-table th:nth-child(4), .cart-table td:nth-child(4) { min-width: 185px; }  /* EZ a Mennyiség */
-.cart-table th:nth-child(5), .cart-table td:nth-child(5) { min-width: 115px; }
-.cart-table th:nth-child(6), .cart-table td:nth-child(6) { min-width: 120px; }
+    .cart-table th:nth-child(2), .cart-table td:nth-child(2) { min-width: 140px; }
+    .cart-table th:nth-child(3), .cart-table td:nth-child(3) { min-width: 115px; }
+    .cart-table th:nth-child(4), .cart-table td:nth-child(4) { min-width: 185px; }
+    .cart-table th:nth-child(5), .cart-table td:nth-child(5) { min-width: 115px; }
+    .cart-table th:nth-child(6), .cart-table td:nth-child(6) { min-width: 120px; }
+    
+    /* --- MENNYISÉG INPUT --- */
     input[type="number"] {
-      max-width: 70px;
-      padding: 8px 0;
-      border-radius: 6px;
-      border: 1px solid #eee5;
-      font-size: 1.1em;
-      text-align: center;
-      background: #fff1e1;
-      color: #223;
-      margin-right: 0;
+        max-width: 70px;
+        padding: 8px 0;
+        border-radius: 6px;
+        border: 1px solid #eee5;
+        font-size: 1.1em;
+        text-align: center;
+        background: #fff1e1;
+        color: #223;
+        margin-right: 0;
+    }
+    
+    /* --- KOSÁR GOMBO(K) --- */
+    .cart-btn.modosit-btn, .modosit-btn {
+        background: #86dbb8;
+        color: #213831;
+        border: 1px solid #b1f7d7;
+        transition: background 0.18s;
+        font-weight: bold;
+        padding: 0 16px;
+        border-radius: 6px;
+        min-width: 40px;
+        min-height: 38px;
+        height: 38px;
+        font-size: 1em;
+        font-family: 'Georgia', serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        white-space: nowrap;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+    .cart-btn.modosit-btn:hover, .modosit-btn:hover {
+        background: #59c49f;
+    }
+    .cart-btn.torles-btn, .torles-btn {
+        background: #dfa26f;
+        color: #fff;
+        font-weight: bold;
+        padding: 0 16px;
+        border-radius: 6px;
+        min-width: 72px;
+        min-height: 38px;
+        height: 38px;
+        font-size: 1em;
+        font-family: 'Georgia', serif;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: none !important;
+        border: none;  
+    }
+    .torles-btn:hover {
+      background: #cf9775;
   }
-  .cart-btn.modosit-btn, .modosit-btn {
-    background: #86dbb8;
-    color: #213831;
-    border: 1px solid #b1f7d7;
-    transition: background 0.18s;
-    font-weight: bold;
-    padding: 0 16px;          /* magasság padding nélkül! */
-    border-radius: 6px;
-    min-width: 40px;
-    min-height: 38px;
-    height: 38px;             /* fix magasság! */
-    font-size: 1.00em;
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;           /* megakadályozza a dupla magasságot */
-    white-space: nowrap;
-    box-sizing: border-box;
-}
-.cart-btn.modosit-btn:hover, .modosit-btn:hover {
-    background: #59c49f;
-}
-.cart-btn.torles-btn, .torles-btn {
-  background: #e56363;
-  color: #fff;
-  border: 1px solid #fa9b9b;
-  font-weight: bold;
-  padding: 0 16px;
-  border-radius: 6px;
-  min-width: 72px;   /* hosszabb szöveg miatt kicsit szélesebb */
-  min-height: 38px;
-  height: 38px;
-  font-size: 1em;
-  font-family: 'Arial', sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  white-space: nowrap;
-  box-sizing: border-box;
-  transition: background 0.18s, color 0.18s;
-  cursor: pointer;
-}
-.cart-btn.torles-btn:hover, .torles-btn:hover {
-  background: #d13d3d;
-}
+    /* --- RENDELÉS LEADÁSA GOMB --- */
     .rendeles-btn {
         background: #dfa26f;
-        color: #213831;
+        color: #fff;
         margin: 18px auto 0 auto;
         display: block;
         font-size: 1.13em;
@@ -221,6 +236,7 @@
         border: none;
         padding: 12px 32px;
         border-radius: 8px;
+        cursor: pointer;
     }
     .rendeles-btn:hover {
         background: #cf9775;
@@ -238,22 +254,104 @@
         pointer-events: none;
         transition: none;
     }
+    
+    /* --- NINCS LEADHATÓ RENDELÉS SZÖVEG --- */
     .custom-cannot-order {
         color: #cb4a19;
         margin-top: 12px;
         font-size: 1em;
-        font-family: Arial, sans-serif;
+        font-family: 'Georgia', serif;
         text-align: center;
         font-weight: 600;
         letter-spacing: 0.07em;
     }
-    .quantity-form {
+    .coupon-row {
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      gap: 16px;
+      align-items: flex-end;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
   }
+  .coupon-form,
+  .coupon-remove-form {
+      display: flex;
+      align-items: flex-end;
+      gap: 7px;
+  }
+  .coupon-form label {
+      color: #ffe0ad;
+      font-weight: bold;
+      margin-right: 6px;
+      font-family: 'Georgia', serif;
+      font-size: 1em;
+  }
+  .coupon-form input[type="text"] {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #b1f7d755;
+      font-size: 1.02em;
+      background: #fff1e1;
+      color: #222;
+      min-width: 120px;
+      margin-right: 2px;
+      font-family: 'Georgia', serif;
+      transition: border 0.18s;
+  }
+  .coupon-form input[type="text"]:focus {
+      border-color: #dfa26f;
+      outline: none;
+      background: #fff8f2;
+  }
+  .coupon-apply-btn {
+      background: #dfa26f;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      padding: 7px 16px;
+      font-size: 1em;
+      font-family: 'Georgia', serif;
+      cursor: pointer;
+      transition: background 0.18s;
+  }
+  .coupon-apply-btn:hover {
+      background: #cf9775;
+  }
+  .coupon-remove-btn {
+      background: #e56363;
+      color: #fff;
+      font-weight: bold;
+      border: 1px solid #fa9b9b;
+      border-radius: 6px;
+      padding: 7px 16px;
+      font-size: 1em;
+      font-family: 'Georgia', serif;
+      cursor: pointer;
+      transition: background 0.18s;
+  }
+  .coupon-remove-btn:hover {
+      background: #d13d3d;
+  }
+  .coupon-info {
+      color: #94ffb0;
+      margin-top: 7px;
+      font-size: 1em;
+      font-family: 'Georgia', serif;
+  }
+  .coupon-message {
+      color: #8fff80;
+      margin-top: 6px;
+      font-size: 1em;
+      font-family: 'Georgia', serif;
+  }
+    /* --- MENNYISÉG MÓDOSÍTÓ SOR --- */
+    .quantity-form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
     @media (max-width: 900px) {
         .cart-container { max-width: 99vw; }
         .cart-table th, .cart-table td { font-size: 0.98em; padding: 7px 3px;}
@@ -331,25 +429,28 @@
     </style>
   {% endif %}
   <header>
-      <div class="logo">Kávék világa</div>
-      <nav>
-          <a href="/">Kezdőlap</a>
-          <a href="#rolunk">Rólunk</a>
-          <a href="#kapcsolat">Kapcsolat</a>
-          <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
-      </nav>
-      <div class="user-info">
-          {% if user.is_authenticated %}
-              <span>Bejelentkezve: {{ user.username }}</span>
-              <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
-                  {% csrf_token %}
-                  <button type="submit">Kijelentkezés</button>
-              </form>
-          {% else %}
-              <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
-          {% endif %}
-      </div>
-  </header>
+    <div class="logo">Kávék világa</div>
+    <nav>
+        <a href="/">Kezdőlap</a>
+        <a href="{% url 'kavezok:kereso' %}">Kávézók</a>
+        <nav>
+            <!-- egyéb menüpontok -->
+            <a href="{% url 'kavezok:kosar_megjelenitese' %}">🛒 Kosár</a>
+        </nav>
+        <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+        {% if user.is_authenticated %}
+            <div class="user-info">
+                <a href="{% url 'kavezok:profil' %}" class="Bejelentkezve"><span>Bejelentkezve: {{ user.username }}</span></a>
+                <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit">Kijelentkezés</button>
+                </form>
+            </div>
+        {% else %}
+            <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
+        {% endif %}
+    </nav>
+</header>
   <div class="cart-container">
     <h2>Kosár</h2>
 
@@ -358,26 +459,28 @@
     {% endif %}
 
     {% if tetelek %}
-      <form method="POST" style="display:inline-block; margin-bottom:12px;">
-        {% csrf_token %}
-        <label for="kedvezmeny_kod">Kedvezménykód:</label>
-        <input id="kedvezmeny_kod" name="kedvezmeny_kod" type="text" placeholder="Pl.: KAVE10">
-        <button type="submit">Kedvezmény alkalmazása</button>
-      </form>
-    
-      {% if kedvezmeny_osszeg and kedvezmeny_osszeg > 0 %}
-        <form method="POST" style="display:inline;">
+    <div class="coupon-row">
+      <form method="POST" class="coupon-form">
           {% csrf_token %}
-          <input type="hidden" name="kedvezmeny_kod" value="">
-          <button type="submit" style="background:#e56363; color:white; border:none; border-radius:6px; padding:3px 10px; margin-left:12px;">Kupon törlése</button>
-        </form>
+          <label for="kedvezmeny_kod">Kedvezménykód:</label>
+          <input id="kedvezmeny_kod" name="kedvezmeny_kod" type="text" placeholder="Pl.: KAVE10">
+          <button type="submit" class="coupon-apply-btn">Alkalmaz</button>
+      </form>
+  
+      {% if kedvezmeny_osszeg and kedvezmeny_osszeg > 0 %}
+          <form method="POST" class="coupon-remove-form">
+              {% csrf_token %}
+              <input type="hidden" name="kedvezmeny_kod" value="">
+              <button type="submit" class="coupon-remove-btn">Kupon törlése</button>
+          </form>
       {% endif %}
-    
-      {% if kedvezmeny_nev %}
-        <div style="color:#94ffb0; margin-top:6px;"><b>Kedvezmény típusa:</b> {{ kedvezmeny_nev }}</div>
-      {% endif %}
-      {% if kedvezmeny_uzenet %}
-        <div style="color: green; margin-top:6px;">{{ kedvezmeny_uzenet }}</div>
+  </div>
+  
+  {% if kedvezmeny_nev %}
+      <div class="coupon-info"><b>Kedvezmény típusa:</b> {{ kedvezmeny_nev }}</div>
+  {% endif %}
+  {% if kedvezmeny_uzenet %}
+      <div class="coupon-message">{{ kedvezmeny_uzenet }}</div>
       {% endif %}
       <div style="background:#223b33;padding:18px 28px; border-radius:10px;margin-top:20px;">
         <div style="color:#dfa26f;">Pontjaid: <b>{{ pontjaid }}</b></div>

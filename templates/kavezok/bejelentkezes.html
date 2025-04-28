@@ -5,10 +5,18 @@
     <title>Bejelentkezés | Kávék világa</title>
     <style>
         body {
-            background: #16332a;
-            font-family: 'Montserrat', Arial, sans-serif;
+            background-color: #1f4037;
+            color: white;
+            font-family: 'Georgia', serif;
             margin: 0;
-            color: #f5eadc;
+        }
+        header {
+            background-color: #1c2824;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
         }
         .navbar {
             background: #19392d;
@@ -24,22 +32,26 @@
             margin: 0 auto;
         }
         .logo {
-            color: #ffe1b3;
-            font-size: 2.1rem;
-            letter-spacing: 2px;
-            margin: 0;
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
         nav a {
-            color: #ffe1b3;
+            color: white;
             text-decoration: none;
-            margin-left: 28px;
-            font-size: 1.13rem;
-            font-weight: 500;
-            transition: color 0.2s;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: color 0.3s;
         }
         nav a:hover {
-            color: #ffcb80;
+            color: #cf9775;
         }
+
         .login-container {
             min-height: 100vh;
             display: flex;
@@ -134,16 +146,28 @@
 </head>
 <body>
     <!-- Fejléc -->
-    <header class="navbar">
-        <div class="container">
-            <h1 class="logo">Kávék világa</h1>
+    <header>
+        <div class="logo">Kávék világa</div>
+        <nav>
+            <a href="/">Kezdőlap</a>
+            <a href="{% url 'kavezok:kereso' %}">Kávézók</a>
             <nav>
-                <a href="/">Kezdőlap</a>
-                <a href="#kavezok">Kávézók</a>
-                <a href="#rolunk">Rólunk</a>
-                <a href="#kapcsolat">Kapcsolat</a>
+                <!-- egyéb menüpontok -->
+                <a href="{% url 'kavezok:kosar_megjelenitese' %}">🛒 Kosár</a>
             </nav>
-        </div>
+            <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+            {% if user.is_authenticated %}
+                <div class="user-info">
+                    <a href="{% url 'kavezok:profil' %}"><span>Bejelentkezve: {{ user.username }}</span></a>
+                    <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit">Kijelentkezés</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
+            {% endif %}
+        </nav>
     </header>
 
     <!-- Bejelentkezési tartalom -->

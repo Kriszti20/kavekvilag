@@ -188,9 +188,7 @@
         <div class="logo">Kávék világa</div>
         <nav>
             <a href="/">Kezdőlap</a>
-            <a href="#kavezok">Kávézók</a>
-            <a href="#rolunk">Rólunk</a>
-            <a href="#kapcsolat">Kapcsolat</a>
+            <a href="{% url 'kavezok:kereso' %}">Kávézók</a>
             <nav>
                 <!-- egyéb menüpontok -->
                 <a href="{% url 'kavezok:kosar_megjelenitese' %}">🛒 Kosár</a>
