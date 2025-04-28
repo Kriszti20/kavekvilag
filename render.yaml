@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: kavekvilag
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py migrate --noinput
+    startCommand: gunicorn kavezok.wsgi:application
