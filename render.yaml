@@ -3,6 +3,6 @@ services:
     name: kavekvilag
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: |
+    startCommand: | 
       python manage.py migrate --noinput
       gunicorn kavezo_ajanlo.wsgi:application
