@@ -242,7 +242,90 @@
             text-align: center;
             font-size: 15px;
         }
-             
+        .profile-section {
+            max-width: 700px;
+            margin: 30px auto 0 auto;
+            padding: 0 10px;
+        }
+        .profile-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            margin-top: 20px;
+        }
+        .profile-card {
+            background: #324841;
+            border-radius: 13px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            padding: 20px 32px 18px 32px;
+            margin: 0 auto;
+            color: #fff6db;
+            max-width: 540px;
+            width: 100%;
+        }
+        .profile-card strong {
+            color: #cf9775;
+        }
+        .profile-card .card-label {
+            color: #cf9775;
+            font-weight: bold;
+            margin-right: 4px;
+        }
+        .profile-card + .profile-card { margin-top:18px; }
+        .profile-card ul {
+            margin-left: 0; padding-left: 18px;
+        }
+        .profile-card li {
+            margin-bottom: 4px;
+        }
+        .profile-card small {
+            color: #b7bf93;
+        }
+        
+        @media (max-width: 680px) {
+            .profile-card { padding: 13px 6vw; }
+        }
+        .ertekeles-tomb {
+            background: #324841;
+            border-radius: 13px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            padding: 18px 26px 10px 26px;
+            max-width: 450px;
+            margin: 0 auto 24px auto;
+        }
+        
+        .ertekeles-egy-sajat {
+            border-bottom: 1px solid #41594f;
+            padding: 8px 0 5px 0;
+        }
+        .ertekeles-egy-sajat:last-child {
+            border-bottom: none;
+            padding-bottom: 2px;
+        }
+        .ertekeles-egy-sajat a {
+            color: #cf9775;
+            font-weight: bold;
+            text-decoration: none;
+            margin-right: 6px;
+        }
+        .ertekeles-egy-sajat a:hover {
+            text-decoration: underline;
+        }
+        .ertekeles-egy-sajat .pont {
+            color: #eebc7f;
+            font-weight: normal;
+            margin-left: 3px;
+        }
+        .ertekeles-egy-sajat .szoveg {
+            margin-bottom: 0;
+            font-style: italic;
+            color: #e3deb7;
+            font-size: 0.95em;
+        }
+        .ertekeles-egy-sajat small {
+            color: #b7bf93;
+            font-size: 0.90em;
+        }
     </style>
 </head>
 <body>
@@ -314,53 +397,72 @@
             Sorozat: <b>{{ streak }}</b> nap
         </div>
     </div>
-    <h2>Foglalásaim</h2>
-    {% for foglalas in foglalasok %}
-        <p><strong>Kávézó:</strong> {{ foglalas.kavezo.nev }}</p>
-        <p><strong>Dátum:</strong> {{ foglalas.datum }}</p>
-        <p><strong>Személyek száma:</strong> {{ foglalas.szemelyek_szama }}</p>
-        <p><strong>Megjegyzés:</strong> {{ foglalas.megjegyzes }}</p>
+    {% regroup foglalasok by kavezo as foglalasok_kavezonkent %}
+    {% regroup foglalasok by kavezo as foglalasok_kavezonkent %}
+    {% regroup foglalasok by kavezo as foglalasok_kavezonkent %}
+
+    <h2>Foglalásaim (kávézónként)</h2>
+    {% for group in foglalasok_kavezonkent %}
+      <div class="kavezo-blokk">
+        <h3 style="color:#dfa26f;">{{ group.grouper.nev }}</h3>
+        <ul>
+          {% for foglalas in group.list %}
+            <li>
+              <b>Dátum:</b> {{ foglalas.datum|date:"Y. F j. H:i" }},
+              <b>Személyek:</b> {{ foglalas.szemelyek_szama }},
+              <b>Megjegyzés:</b> {{ foglalas.megjegyzes|default:"—" }}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     {% empty %}
-        <p>Nincs foglalásod.</p>
+      <div>Még nincsenek foglalásaid.</div>
     {% endfor %}
-
-    <h2>Rendeléseid</h2>
-    {% for rendeles in rendelesek %}
-        <div class="rendeles">
-            <p><strong>Dátum:</strong> {{ rendeles.datum }}</p>
-            <p><strong>Rendelt termékek:</strong></p>
-            <ul>
-                {% for tetel in rendeles.tetel_lista.all %}
-                    <li>
-                        {{ tetel.termek.nev }} - {{ tetel.termek.ar }} Ft
-                        (<a href="{% url 'kavezok:kavezo_reszletek' tetel.termek.kavezo.id %}" class="kavezo-link">
-                            {{ tetel.termek.kavezo.nev }}
-                        </a>)
-                    </li>
-                {% empty %}
-                    <li><em>Nincs termék.</em></li>
-                {% endfor %}
-            </ul>
+    
+        <h2 style="text-align:center;color:#cf9775;margin:32px 0 7px 0;">Rendeléseid</h2>
+        <div class="profile-cards">
+            {% for rendeles in rendelesek %}
+            <div class="profile-card">
+                <div><span class="card-label">Dátum:</span> {{ rendeles.datum|date:"Y. F j. H:i" }}</div>
+                <div><span class="card-label">Rendelt termékek:</span>
+                    <ul>
+                    {% for tetel in rendeles.tetel_lista.all %}
+                        <li>
+                            {{ tetel.termek.nev }} – {{ tetel.termek.ar }} Ft
+                            (<a href="{% url 'kavezok:kavezo_reszletek' tetel.termek.kavezo.id %}" class="kavezo-link">
+                                {{ tetel.termek.kavezo.nev }}
+                            </a>)
+                        </li>
+                    {% empty %}
+                        <li><em>Nincs termék.</em></li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% empty %}
+            <div class="profile-card">Nincs rendelésed.</div>
+            {% endfor %}
         </div>
-    {% endfor %}
-
-    <h2>Saját értékeléseid</h2>
-    {% if ertekelesek %}
-      <ul>
-        {% for ertekeles in ertekelesek %}
-          <li>
-            <a href="{% url 'kavezok:kavezo_reszletek' kavezo_id=ertekeles.kavezo.id %}">
-                <strong>{{ ertekeles.kavezo.nev }}</strong>
-            </a>
-            ({{ ertekeles.pontszam }} csillag) <br>
-            {{ ertekeles.megjegyzes }}
-            <br><small>{{ ertekeles.datum|date:"Y.m.d H:i" }}</small>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>Még nem értékeltél egyetlen helyet sem.</p>
-    {% endif %}
+    
+                <h2 style="text-align:center;color:#cf9775;margin:32px 0 7px 0;">Saját értékeléseid</h2>
+        <div class="ertekeles-tomb">
+        {% if ertekelesek %}
+            {% for ertekeles in ertekelesek %}
+            <div class="ertekeles-egy-sajat">
+                <a href="{% url 'kavezok:kavezo_reszletek' kavezo_id=ertekeles.kavezo.id %}">
+                    {{ ertekeles.kavezo.nev }}
+                </a>
+                <span class="pont">({{ ertekeles.pontszam }} csillag)</span>
+                <div class="szoveg">{{ ertekeles.megjegyzes }}</div>
+                <small>{{ ertekeles.datum|date:"Y.m.d H:i" }}</small>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="padding:8px 0;">Még nem értékeltél egyetlen helyet sem.</div>
+        {% endif %}
+        </div>
+    
+    </div>
 
 </body>
 </html>

@@ -152,6 +152,227 @@
             font-style: italic;
             font-size: 0.98em;
         }
+        .termekek-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 22px;
+            max-width: 750px;
+            margin: 30px auto 36px auto;
+        }
+        
+        .termek-kartya {
+            background: #253932;
+            border-radius: 13px;
+            box-shadow: 0 3px 12px #00000016;
+            padding: 18px 13px 16px 16px;
+            min-height: unset;
+            border: 1.5px solid #3e524030;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: box-shadow 0.15s, border-color 0.15s, transform 0.16s;
+        }
+        .termek-kartya:hover {
+            box-shadow: 0 7px 24px #18484027;
+            border-color: #f9be7ccc;
+            transform: scale(1.022);
+            z-index: 2;
+        }
+        
+        .termek-fejlec {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5px;
+            gap: 9px;
+        }
+        .termek-nev {
+            color: #ffe29e;
+            font-size: 1.09em;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+        .termek-ar {
+            color: #f9be7c;
+            background: #ffe29e1a;
+            font-weight: bold;
+            font-size: 1em;
+            border-radius: 8px;
+            padding: 2px 9px 2px 10px;
+            margin-left: 5px;
+            margin-bottom: -2px;
+        }
+        
+        .termek-leiras {
+            color: #fffad7;
+            font-size: 0.99em;
+            margin-bottom: 14px;
+            margin-top: 2px;
+        }
+        
+        .termek-kartya-lab {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .kartya-btn {
+            background: linear-gradient(90deg, #f9be7c 65%, #ffe29e 100%);
+            color: #234634;
+            font-weight: 600;
+            font-size: 0.99em;
+            padding: 7px 17px;
+            border-radius: 6px;
+            border: none;
+            margin-top: 0;
+            box-shadow: 0 1px 4px #f9be7c15;
+            transition: background 0.16s, box-shadow 0.16s;
+        }
+        .kartya-btn:hover {
+            cursor: pointer;
+        }
+        
+        .kartya-link {
+            color: #f9be7c;
+            text-decoration: underline;
+            font-weight: bold;
+            margin-left: 5px;
+            transition: color 0.15s;
+            font-size: 0.92em;
+        }
+        .kartya-link:hover {
+            color: #fff6d6;
+        }
+        .kosar-btn {
+            background: #dfa26f;
+            color: #133929;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 1em;
+            margin-top: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.18s;
+        }
+        .kosar-btn:hover {
+            background: #c88b5f;
+        }
+            .ertekeles-szulo {
+                max-width: 800px;
+                margin: 0 auto 24px auto;
+                padding: 0 8px;
+            }
+            .ertekeles-lista {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                justify-content: flex-start;
+            }
+            .ertekeles-box {
+                background: #223a32;
+                border-radius: 11px;
+                box-shadow: 0 1.5px 6px rgba(0,0,0,0.08);
+                padding: 14px 17px 11px 17px;
+                margin-bottom: 6px;
+                display: flex;
+                flex-direction: column;
+                max-width: 215px;
+                min-width: 170px;
+                width: 100%;
+                min-height: 60px;
+                font-size: 0.98em;
+            }
+            .ertekeles-fejlec {
+                display: flex; 
+                align-items: center;
+                gap: 7px;
+                margin-bottom: 2px;
+                flex-wrap: wrap;
+            }
+            .ertekeles-felhasznalo {
+                font-weight: bold;
+                font-size: 0.99em;
+                color: #ffe79a;
+                margin-right: 3px;
+                white-space: nowrap;
+            }
+            .csillagok {
+                color: gold;
+                font-size: 1.09em;
+                letter-spacing: -1.4px;
+                margin-top: 1px;
+            }
+            .ertekeles-megjegyzes {
+                font-style: italic;
+                color: #e0e0e0;
+                margin-top: 1px;
+                font-size: 0.93em;
+            }
+            .ertekeles-box span[style*="color:#a6b485"] {
+                font-size: 0.81em;
+                margin-left: 8px;
+                white-space: nowrap;
+            }
+            
+            .ertekeles-form-box {
+                background: #223a32;
+                border-radius: 12px;
+                box-shadow: 0 2px 9px rgba(0,0,0,0.11);
+                padding: 21px 17px 18px 17px;
+                max-width: 370px;
+                margin: 30px auto 0 auto;
+            }
+            .ertekeles-form-box h2 {
+                color: #fff9db;
+                margin-bottom: 14px;
+                font-size: 1.18em;
+            }
+            .ertekeles-form-box label {
+                display: block;
+                margin-bottom: 4px;
+                color: #ffe79a;
+                font-weight: bold;
+                font-size: 1em;
+            }
+            .ertekeles-form-box select,
+            .ertekeles-form-box textarea {
+                width: 100%;
+                padding: 6px 8px;
+                border-radius: 5px;
+                border: 1px solid #d6a95c;
+                margin-bottom: 9px;
+                background: #284a41;
+                color: #fff8cd;
+                font-size: 1em;
+            }
+            .ertekeles-form-box button {
+                padding: 7px 13px;
+                background: linear-gradient(90deg,#ffcd70 60%, #ffb553 100%);
+                color: #433800;
+                border: none;
+                border-radius: 5px;
+                font-weight: bold;
+                cursor: pointer;
+                font-size: 1em;
+                margin-top: 5px;
+            }
+            
+            @media (max-width: 900px) {
+                .ertekeles-szulo { max-width: 96vw; }
+                .ertekeles-box { max-width: 38vw; }
+            }
+            @media (max-width: 650px) {
+                .ertekeles-lista { flex-direction: column; align-items: center; }
+                .ertekeles-box { max-width: 96vw; }
+            }
+        .kedvezmenyek-doboz {
+            max-width: 520px;
+            margin: 28px auto;
+        }
+
     </style>
 </head>
 <body>
@@ -231,89 +452,109 @@
     });
     </script>
 {% endif %}
-    <h2>Elérhető termékek</h2>
-<ul>
-        {% for termek in termekek %}
-    <li>
-        <h3>{{ termek.nev }}</h3>
-        <p><strong>Ár:</strong> {{ termek.ar }} Ft</p>
-        <p>{{ termek.leiras|default:"Nincs részletes leírás." }}</p>
-        {% if user.is_authenticated %}
-            <form method="post" action="{% url 'kavezok:kosar_hozzaad' termek.id %}">
-                {% csrf_token %}
-                <button type="submit">Kosárba tesz</button>
-            </form>
-        {% else %}
-            <p>
-                <span style="color:#F9BE7C;">A kosárhoz csak bejelentkezve adhatsz hozzá terméket! </span>
-                <a href="{% url 'kavezok:bejelentkezes' %}"><b>Jelentkezz be!</b></a>
-            </p>
-        {% endif %}
-    </li>
+<h2>Elérhető termékek</h2>
+<div class="termekek-grid">
+    {% for termek in termekek %}
+        <div class="termek-kartya">
+            <div class="termek-fejlec">
+                <span class="termek-nev">{{ termek.nev }}</span>
+                <span class="termek-ar">{{ termek.ar|floatformat:0 }} Ft</span>
+            </div>
+            <div class="termek-leiras">
+                {{ termek.leiras|default:"Nincs részletes leírás." }}
+            </div>
+            <div class="termek-kartya-lab">
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'kavezok:kosar_hozzaad' termek.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="kartya-btn">Kosárba teszem</button>
+                    </form>
+                {% else %}
+                    <div class="termek-login-info">
+                        <span style="color:#F9BE7C;">Belépés után rakhatod kosárba!</span>
+                        <a href="{% url 'kavezok:bejelentkezes' %}" class="kartya-link"><b>Bejelentkezés</b></a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     {% empty %}
-        <li><p>Jelenleg nincsenek elérhető termékek.</p></li>
+        <div style="color:#ffe29e;text-align:center;">Jelenleg nincsenek elérhető termékek.</div>
     {% endfor %}
-    <div class="ertekelesek">
-        <h2>Értékelések</h2>
-        {% if ertekelesek %}
-            <ul>
-                {% for ertekeles in ertekelesek %}
-                    <li>
-                        <strong>{{ ertekeles.felhasznalo }}</strong> ({{ ertekeles.pontszam }} csillag)
-                        <p>{{ ertekeles.megjegyzes }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>Még nincsenek értékelések.</p>
-        {% endif %}
-    </div>
+</div>
 
-    <div class="ertekeles-form">
+
+<div>
+    <h3>Felhasználói értékelések</h3>
+    
+    <div class="ertekeles-szulo">
+        <h3 style="margin-bottom:16px;">Felhasználói értékelések</h3>
+        <div class="ertekeles-lista">
+          {% for ertekeles in ertekelesek %}
+            <div class="ertekeles-box">
+                <div class="ertekeles-fejlec">
+                    <span class="ertekeles-felhasznalo">
+                      {{ ertekeles.felhasznalo.username|default:"Vendég" }}
+                    </span>
+                    <span class="csillagok">
+                      {% for i in "12345"|make_list %}
+                        {% if ertekeles.pontszam >= i|add:'0' %}
+                          ★
+                        {% else %}
+                          <span style="color:#5a6344;">★</span>
+                        {% endif %}
+                      {% endfor %}
+                    </span>
+                    <span style="color:#ffe79a; font-size:0.93em; margin-left:7px;">{{ ertekeles.pontszam }}/5</span>
+                    <span style="color:#a6b485; font-size:0.83em; margin-left:9px;">
+                      {{ ertekeles.datum|date:"Y.m.d H:i" }}
+                    </span>
+                </div>
+                <div class="ertekeles-megjegyzes">{{ ertekeles.megjegyzes }}</div>
+            </div>
+          {% empty %}
+            <i style="color:#fff8cd;">Még nincsenek értékelések.</i>
+          {% endfor %}
+        </div>
+    </div>
+    
+    <div class="ertekeles-form-box">
         {% if user.is_authenticated %}
             <h2>Értékelés hozzáadása</h2>
             <form method="post">
                 {% csrf_token %}
-                <label for="pontszam">Értékelés:</label>
-                <select id="pontszam" name="pontszam">
-                    <option value="5">5 - Kiváló</option>
-                    <option value="4">4 - Jó</option>
-                    <option value="3">3 - Átlagos</option>
-                    <option value="2">2 - Gyenge</option>
-                    <option value="1">1 - Rossz</option>
-                </select>
-            
-                <label for="megjegyzes">Értékelés szövege:</label>
-                <textarea id="megjegyzes" name="megjegyzes" rows="5" placeholder="Írd meg az értékelésed..."></textarea>
-            
+                {{ form.pontszam.label_tag }}
+                {{ form.pontszam }}
+                {{ form.megjegyzes.label_tag }}
+                {{ form.megjegyzes }}
                 <button type="submit">Küldés</button>
             </form>
         {% else %}
-            <p>Kérlek, <a href="{% url 'kavezok:bejelentkezes' %}">jelentkezz be</a>, hogy értékelhess!</p>
+            <p style="color:#ffe79a;font-weight:bold">
+                Kérlek, <a href="{% url 'kavezok:bejelentkezes' %}" style="color:#ffcd70;">jelentkezz be</a>, hogy értékelhess!
+            </p>
         {% endif %}
     </div>
     <h2>Kedvezmények</h2>
-{% if kedvezmenyek %}
-<div class="kedvezmenyek-doboz">
-    {% for kedvezmeny in kedvezmenyek %}
-        <div class="kedvezmeny-kartya">
-            <div class="kedvezmeny-fej">
-                <span class="kedvezmeny-nev">{{ kedvezmeny.nev }}</span>
-                <span class="kedvezmeny-szazalek">-{{ kedvezmeny.ar_szazalek }}%</span>
-            </div>
-            <div class="kedvezmeny-idoszak">
-                <small>Érvényes: {{ kedvezmeny.ervenyes_tol|date:"Y.m.d" }} – {{ kedvezmeny.ervenyes_ig|date:"Y.m.d" }}</small>
-            </div>
-            {% if kedvezmeny.leiras %}
-                <div class="kedvezmeny-leiras">{{ kedvezmeny.leiras }}</div>
-            {% endif %}
-            
+    {% if kedvezmenyek %}
+        <div class="kedvezmenyek-doboz">
+            {% for kedvezmeny in kedvezmenyek %}
+                <div class="kedvezmeny-kartya">
+                    <div class="kedvezmeny-fej">
+                        <span class="kedvezmeny-nev">{{ kedvezmeny.nev }}</span>
+                        <span class="kedvezmeny-szazalek">-{{ kedvezmeny.ar_szazalek }}%</span>
+                    </div>
+                    <div class="kedvezmeny-idoszak">
+                        <small>Érvényes: {{ kedvezmeny.ervenyes_tol|date:"Y.m.d" }} – {{ kedvezmeny.ervenyes_ig|date:"Y.m.d" }}</small>
+                    </div>
+                    {% if kedvezmeny.leiras %}
+                        <div class="kedvezmeny-leiras">{{ kedvezmeny.leiras }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-</div>
-{% else %}
-    <p>Nincs aktív kedvezmény ennél a kávézónál.</p>
-{% endif %}
+    {% else %}
+        <p>Nincs aktív kedvezmény ennél a kávézónál.</p>
+    {% endif %}
     
 </ul>
 </body>

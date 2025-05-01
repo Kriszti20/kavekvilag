@@ -114,20 +114,6 @@
             margin:0 0 3px 0;
             color:#F9BE7C;
         }
-        .reszletek-btn {
-            display: inline-block;
-            margin-top: 7px;
-            padding: 6px 16px;
-            background: #f9be7c;
-            border-radius: 7px;
-            color: #133929;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background 0.17s;
-        }
-        .reszletek-btn:hover {
-            background: #fde3c6;
-        }
         .kavezo-card p { margin:3px 0; color:#eee;}
         .search-form select {
             width: 100%;
@@ -154,6 +140,34 @@
             background-position: right 8px center;
             background-size: 18px 18px;
             padding-right: 28px;
+        }
+        .reszletek-btn {
+            display: inline-block;
+            margin-top: 7px;
+            padding: 6px 16px;
+            background: #f9be7c;
+            border-radius: 7px;
+            color: #133929;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.17s;
+        }
+        .reszletek-btn:hover {
+            background: #fde3c6;
+        }
+        .reszletek-btn, .reszletek-btn:visited {
+            display: inline-block;
+            margin-top: 7px;
+            padding: 6px 16px;
+            background: #f9be7c;
+            border-radius: 7px;
+            color: #133929;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.17s;
+        }
+        .reszletek-btn:hover {
+            background: #fde3c6;
         }
     </style>
 </head>
@@ -284,9 +298,9 @@ document.getElementById('kavezo-kereso-form').onsubmit = function(event) {
                             : ''}
                         ${
                             kavezo.id 
-                            ? `<a href="/kavezo/${kavezo.id}/">Részletek</a>`
+                            ? `<a href="/kavezo/${kavezo.id}/" class="reszletek-btn">Részletek</a>`
                             : (kavezo.place_id 
-                                ? `<a href="/kavezo/import-google/?place_id=${encodeURIComponent(kavezo.place_id)}&nev=${encodeURIComponent(kavezo.name)}&cim=${encodeURIComponent(cim)}">Részletek</a>`
+                                ? `<a href="/kavezo/import-google/?place_id=${encodeURIComponent(kavezo.place_id)}&nev=${encodeURIComponent(kavezo.name)}&cim=${encodeURIComponent(cim)}" class="reszletek-btn">Részletek</a>`
                                 : ''
                             )
                         }
@@ -294,8 +308,9 @@ document.getElementById('kavezo-kereso-form').onsubmit = function(event) {
                 });
                 listaDiv.innerHTML = html;
             });
+    
     }
-}; // !!! HIÁNYZOTT, ez az ONSUBMIT függvény ZÁRÁSA !!!
+}; 
 
 // Közeli kávézók gomb (GPS alapján)
 document.getElementById("kereso-btn").onclick = function(){
@@ -322,7 +337,7 @@ document.getElementById("kereso-btn").onclick = function(){
                                         </h2>
                                         <p><strong>Cím:</strong> ${kavezo.cim}</p>
                                         ${kavezo.rating !== undefined ? `<p><strong>Értékelés:</strong> <span style="color:gold">${kavezo.rating}</span></p>` : ``}
-                                        <a href="/kavezo/import-google/?place_id=${encodeURIComponent(kavezo.place_id)}&nev=${encodeURIComponent(kavezo.nev || kavezo.name)}&cim=${encodeURIComponent(kavezo.cim || kavezo.formatted_address || "")}">Részletek</a>
+                                        <a href="/kavezo/import-google/?place_id=${encodeURIComponent(kavezo.place_id)}&nev=${encodeURIComponent(kavezo.nev || kavezo.name)}&cim=${encodeURIComponent(kavezo.cim || kavezo.formatted_address || "")}" class="reszletek-btn">Részletek</a>
                                     </div>
                                 `;
                             });

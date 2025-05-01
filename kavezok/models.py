@@ -2,13 +2,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from datetime import datetime, time
-from django.contrib.auth.models import User
-
-#from django.db import models
-from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User
-from datetime import datetime, time
-
 
 
 # Kávézó Modell
@@ -71,34 +64,16 @@ class Nyitvatartas(models.Model):
     def __str__(self):
         return f"{self.kavezo.nev} - {self.get_nap_display()}: {self.nyitas} - {self.zaras}"
 
-
-
-# Értékelés Modell
+from django.conf import settings
 class Ertekeles(models.Model):
-    
-    felhasznalo = models.ForeignKey(User, on_delete=models.CASCADE)
-    kavezo = models.ForeignKey(Kavezo, on_delete=models.CASCADE)
-    pontszam = models.PositiveSmallIntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    megjegyzes = models.TextField(null=True, blank=True)
+    kavezo = models.ForeignKey(Kavezo, on_delete=models.CASCADE, related_name='ertekelesek')
+    felhasznalo = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    megjegyzes = models.TextField()
+    pontszam = models.PositiveSmallIntegerField(
+        choices=[(5, '5 csillag'), (4, '4 csillag'), (3, '3 csillag'), (2, '2 csillag'), (1, '1 csillag')],
+        verbose_name='Értékelés'
+    )
     datum = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.felhasznalo.username} - {self.kavezo.nev} - {self.pontszam}"
-
-from django.db import models
-
-class Kedvezmeny(models.Model):
-    kavezo = models.ForeignKey('Kavezo', on_delete=models.CASCADE, related_name='kedvezmenyek')
-    neve = models.CharField(max_length=100)
-    leiras = models.TextField()
-    ervenyes_tol = models.DateField()
-    ervenyes_ig = models.DateField()
-    ar_szazalek = models.PositiveIntegerField(null=True, blank=True)  # százalékos kedvezmény
-    aktiv = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"{self.neve} ({self.kavezo.nev})"
-
 
 # Admin Értékelés Modell
 class AdminErtekeles(models.Model):
@@ -140,8 +115,6 @@ class Preferencia(models.Model):
     def __str__(self):
         return f"{self.felhasznalo.username}"
     
-from django.db import models
-
 class Member(models.Model):
     nev = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
@@ -169,10 +142,6 @@ class Foglalas(models.Model):
     def __str__(self):
         return f"{self.felhasznalo.username} - {self.kavezo.nev} ({self.datum})"
 
-    
-    
-    
-    from django.db import models
 
 class Termek(models.Model):
     kavezo = models.ForeignKey(Kavezo, on_delete=models.CASCADE, related_name='termekek')
@@ -183,9 +152,7 @@ class Termek(models.Model):
     
     def __str__(self):
         return f"{self.nev} )"
-    
 
-    
 from django.shortcuts import render, get_object_or_404
 from .models import Kavezo, Termek
 
@@ -207,45 +174,25 @@ class Rendeles(models.Model):
         return f"Rendelés {self.felhasznalo.username} részére ({self.datum})"
 
 
-from django.db import models
-
 class RendelesTetel(models.Model):
     rendeles = models.ForeignKey(Rendeles, on_delete=models.CASCADE, related_name="tetel_lista")
     termek = models.ForeignKey('Termek', on_delete=models.CASCADE)
     mennyiseg = models.PositiveIntegerField(default=1)
-    # Opcionális: ár mentése a rendelés pillanatában
     ar = models.PositiveIntegerField(default=0)
 
     @property
     def osszeg(self):
         return self.mennyiseg * self.ar
 
-
-
-from django.db import models
-from django.contrib import admin
-
-
 class ArKategoria(models.Model):
     nev = models.CharField(max_length=100)  # Pl. 'olcsó', 'közepes', 'drága'
 
     def __str__(self):
         return self.nev
-    
-from django.db import models
-
-from django.contrib.auth.models import User
 
 class Kosar(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='kosar')
-    # egy felhasználónak csak egy kosara van
 
-#class KosarTetel(models.Model):
- #   kosar = models.ForeignKey(Kosar, on_delete=models.CASCADE, related_name='tetel_lista')
-  #  termek = models.ForeignKey(Termek, on_delete=models.CASCADE)
-   # mennyiseg = models.PositiveIntegerField(default=1)
-
-# models.py
 class KosarTetel(models.Model):
     kosar = models.ForeignKey(Kosar, on_delete=models.CASCADE, related_name='tetel_lista', null=True, blank=True)
     felhasznalo = models.ForeignKey(User, on_delete=models.CASCADE, related_name="kosar_tetelek")
@@ -256,8 +203,6 @@ class KosarTetel(models.Model):
     def osszeg(self):
         return self.termek.ar * self.mennyiseg
 
-
-from django.db import models
 
 class Kedvezmeny(models.Model):
     kavezo = models.ForeignKey(Kavezo, on_delete=models.CASCADE, related_name="kedvezmenyek", null=True, blank=True)
@@ -280,13 +225,6 @@ class Kupon(models.Model):
 
     def __str__(self):
         return f"{self.kod} ({self.szazalek}%)"
-    
-# model.py
-from django.db import models
-from django.contrib.auth.models import User
-
-from django.db import models
-from django.contrib.auth.models import User
 
 class Profil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -305,9 +243,6 @@ class Profil(models.Model):
 
     def __str__(self):
         return self.user.username
-
-from django.db import models
-from django.contrib.auth.models import User
 
 class Pontgyujtes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

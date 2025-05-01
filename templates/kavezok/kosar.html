@@ -15,8 +15,6 @@
         color: white;
         overflow-x: hidden;
     }
-    
-    /* --- FEJLÉC, MENÜ --- */
     header {
         background-color: #1c2824;
         padding: 15px 30px;
@@ -25,59 +23,55 @@
         align-items: center;
         color: white;
     }
+
     header .logo {
-        font-size: 2rem;
+        font-size: 1.8rem;
         font-family: 'Georgia', serif;
         font-weight: bold;
-        letter-spacing: 1px;
     }
+
     header nav {
         display: flex;
-        gap: 24px;
+        align-items: center;
+        gap: 20px;
     }
+
     header nav a {
         color: white;
         text-decoration: none;
-        font-size: 1.06rem;
+        font-size: 1rem;
         font-weight: bold;
         transition: color 0.3s;
     }
+
     header nav a:hover {
-        color: #dfa26f;
+        color: #cf9775;
     }
+
     header .user-info {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    header .user-info a,
-    header .user-info span {
-        color: #fff;
-        font-weight: bold;
-        text-decoration: none;
         font-size: 1rem;
-    }
-    
-    header .user-info a:hover {
-        color: #dfa26f;
+        font-weight: bold;
+        color: #f0f0f0;
     }
     header .logout-form {
         display: inline-block;
         margin-left: 10px;
     }
+
     header .logout-form button {
         background: none;
         border: none;
-        color: #fff;
+        color: white;
         font-size: 1rem;
         font-family: 'Georgia', serif;
         cursor: pointer;
         text-decoration: underline;
-        transition: color 0.18s;
     }
+
     header .logout-form button:hover {
         color: #cf9775;
     }
+
     
     /* --- KOSÁR KONTAINER --- */
     .cart-container {

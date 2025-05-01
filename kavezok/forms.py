@@ -20,24 +20,16 @@ class NyitvatartasForm(forms.ModelForm):
         }
 
 
-# Értékelés űrlap
 class ErtekelesForm(forms.ModelForm):
     class Meta:
         model = Ertekeles
-        fields = ['kavezo', 'pontszam', 'megjegyzes']
-        widgets = {
-            'pontszam': forms.NumberInput(attrs={'min': 1, 'max': 5}),
-        }
-
-
+        fields = ['pontszam', 'megjegyzes']
+        
 # Felhasználói preferenciák űrlap
 class PreferenciaForm(forms.ModelForm):
     class Meta:
         model = Preferencia
         fields = ['kedvenc_kave', 'hangulat', 'ar']
-        
-from django import forms
-from .models import Foglalas
 
 class FoglalasForm(forms.ModelForm):
     class Meta:
@@ -53,8 +45,6 @@ class FoglalasForm(forms.ModelForm):
             'szemelyek_szama': 'Személyek száma',
             'megjegyzes': 'Megjegyzés'
         }
-        
-from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -65,10 +55,6 @@ class SajátUserCreationForm(UserCreationForm):
         model = User
         fields = ("username", "email", "password1", "password2")
         
-        
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 
 class SajátRegisztrációsForm(UserCreationForm):
     email = forms.EmailField(label='Email cím')

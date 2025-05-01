@@ -17,37 +17,62 @@
         
         /* Fejléc stílusok */
         header {
-            padding: 15px 30px;
             background-color: #1c2824;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: bold;
+            color: white;
         }
-        
+
         header .logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif;
             font-weight: bold;
         }
-        
+
         header nav {
             display: flex;
-            align-items: center; /* Középre igazítás függőlegesen */
-            gap: 20px; /* Távolság a menüpontok között */
+            align-items: center;
+            gap: 20px;
         }
-        
+
         header nav a {
             color: white;
             text-decoration: none;
             font-size: 1rem;
             font-weight: bold;
-            transition: color 0.3s ease;
-            font-weight: bold;
+            transition: color 0.3s;
         }
-        
+
         header nav a:hover {
-            color: #dfa26f; /* Kávébarna hover */
+            color: #cf9775;
         }
+
+        header .user-info {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #f0f0f0;
+        }
+        header .logout-form {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        header .logout-form button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        header .logout-form button:hover {
+            color: #cf9775;
+        }
+
         
         /* Felhasználói információ része */
         .user-info {
@@ -61,7 +86,6 @@
         header .logout-form {
             display: inline-block;
             margin-left: 10px;
-            font-weight: bold;
         }
 
         header .logout-form button {
@@ -72,7 +96,7 @@
             font-family: 'Georgia', serif;
             cursor: pointer;
             text-decoration: underline;
-            font-weight: bold;
+
         }
 
         header .logout-form button:hover {
