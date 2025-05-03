@@ -139,7 +139,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'tinakrisz03@gmail.com'        # Saját e-mail fiókod
-EMAIL_HOST_PASSWORD = 'ridr ikmk vpoz pvow'         # Itt NEM a sima Gmail jelszavad, hanem alkalmazásjelszó kell
+EMAIL_HOST_USER = 'tinakrisz03@gmail.com'        
+EMAIL_HOST_PASSWORD = 'ridr ikmk vpoz pvow'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+SITE_URL = "http://127.0.0.1:8000"

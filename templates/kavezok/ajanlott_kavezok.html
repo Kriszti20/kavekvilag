@@ -6,19 +6,16 @@
     <title>Ajánlott kávézók</title>
     <link href="https://fonts.googleapis.com/css2?family=Georgia:wght@400;%2,700&family=Arial:wght@400;%2C700&display=swap" rel="stylesheet">
     <style>
-        /* Alapstílusok */
+
+        /* Fejléc */
         body {
             margin: 0;
             font-family: 'Georgia', serif;
-            background-color: #1f4037;
+            background-color: #1f4037; /* Sötétzöld alap */
             color: white;
-            overflow-x: hidden;
         }
-        h1, h2, p {
-            margin: 0;
-        }
-
-        /* Fejléc */
+        
+        /* Fejléc stílusok */
         header {
             background-color: #1c2824;
             padding: 15px 30px;
@@ -28,8 +25,15 @@
             color: white;
         }
 
+        header .logo {
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+        }
+
         header nav {
             display: flex;
+            align-items: center;
             gap: 20px;
         }
 
@@ -42,7 +46,13 @@
         }
 
         header nav a:hover {
-            color: #cf9775; /* Világosbarna árnyalat */
+            color: #cf9775;
+        }
+
+        header .user-info {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #f0f0f0;
         }
         header .logout-form {
             display: inline-block;
@@ -114,17 +124,188 @@
             color: #dfa26f;
             text-decoration: none;
         }
+        .ajanlott-container {
+            max-width: 560px;
+            margin: 2.5rem auto 0 auto;
+            background: none;
+            padding: 0;
+        }
+        .ajanlott-kavezo-lista {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .ajanlott-kavezo-listaelem {
+            background: #212e2c;
+            border-radius: 14px;
+            box-shadow: 0 6px 30px rgba(0,0,0,0.18);
+            padding: 18px 34px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            font-size: 1.13rem;
+            font-family: 'Georgia', serif;
+            color: #e4e4e4;
+            transition: background 0.18s, transform 0.16s;
+            gap: 12px;
+        }
+        .ajanlott-kavezo-listaelem:hover {
+            background: #253e3a;
+            transform: translateY(-3px) scale(1.01);
+        }
+        .kavezo-link {
+            color: #cf9775;
+            font-weight: bold;
+            font-size: 1.09em;
+            text-decoration: none;
+            transition: color 0.22s;
+            margin-right: 7px;
+        }
+        .kavezo-link:hover {
+            color: #b17d43;
+            text-decoration: underline;
+        }
+        .ajanlas-szam {
+            color: #b7bf93;
+            font-size: 1em;
+            margin-left: 2px;
+        }
+        .ajanlott-kavezo-listaelem.ures-ajanlas {
+            text-align: center;
+            color: #b7bf93;
+            background: #283634;
+        }
+        @media (max-width: 600px) {
+            .ajanlott-kavezo-listaelem { padding: 12px 10px; font-size:1em; }
+            .ajanlott-container { max-width: 97vw; }
+        }
+        .oldal-cim {
+            color: #dfa26f;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            font-size: 2.8rem;
+            text-align: center;
+            margin: 2.4rem 0 1.8rem 0;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 18px #1a1a1a40;
+        }
+        /* Új badge a lista-elem végére */
+        .ajanlas-badge {
+            background: linear-gradient(90deg,#f5d17e 60%,#ddb56a 100%);
+            color: #503812;
+            border-radius: 20px;
+            font-size: 0.92em;
+            padding: 3px 12px 3px 10px;
+            margin-left: 14px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 7px #baa66395;
+            animation: badgepop 0.7s;
+        }
+
+        @keyframes badgepop {
+        0%   { transform: scale(0.6); opacity: 0; }
+        60%  { transform: scale(1.04); opacity: 1; }
+        100% { transform: scale(1); }
+        }
+        /* ------------ RESZPONZÍV KIEGÉSZÍTÉSEK ----------- */
+
+        /* Kis képernyőn (mobil) - alapból minden maximum szélességű */
+        .hero .text-content {
+            max-width: 95%;
+            font-size: 1rem;
+            padding: 0;
+        }
+
+        /* Képek alkalmazkodnak a képernyőhöz */
+        .hero img {
+            max-width: 90vw;
+            width: 100%;
+            height: auto;
+            margin: 1em auto;
+        }
+
+        /* Navigáció egyszerűsítése kis képernyőn pl. függőlegesen elrendezve */
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px 8px;
+                text-align: center;
+            }
+
+            header nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .hero h2 {
+                font-size: 2.2rem;          /* kisebb főcím mobilon */
+            }
+            .hero {
+                height: auto;
+                padding: 16px 0;
+                flex-direction: column;
+            }
+        }
+
+        /* Tablet és nagyobb képernyő */
+        @media (min-width: 1024px) {
+            .hero .text-content {
+                max-width: 50%;
+                font-size: 1.2rem;
+            }
+            .hero img {
+                max-width: 220px;
+            }
+            .hero h2 {
+                font-size: 4rem;
+            }
+        }
+        @media (max-width: 700px) {
+            .blob-1, .blob-2, .blob-3, .blob-4 {
+                display: none; /* vagy tedd őket kisebbre ha szeretnéd látni */
+            }
+        }@media (max-width: 700px) {
+            .blob-1, .blob-2, .blob-3, .blob-4 {
+                width: 60vw !important;
+                height: 60vw !important;
+                left: 10vw !important;
+                top: 10vw !important;
+                right: auto !important;
+                bottom: auto !important;
+            }
+        }
+        body {
+            padding: 0 8px;
+        }
+        @media (min-width: 700px) {
+            body {
+                padding: 0;
+            }
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .kave-cs { font-size: 1.5em; margin-right: 10px; }
     </style>
 </head>
 <body>
     <header>
-        <h1>Ajánlott kávézók</h1>
+        <div class="logo">Kávék világa</div>
         <nav>
             <a href="/">Kezdőlap</a>
-            <a href="#kavezok">Kávézók</a>
-            <a href="#rolunk">Rólunk</a>
-            <a href="#kapcsolat">Kapcsolat</a>
+            <a href="{% url 'kavezok:kereso' %}">Kávézók</a>
+            <nav>
+                <!-- egyéb menüpontok -->
+                <a href="{% url 'kavezok:kosar_megjelenitese' %}">Kosár</a>
+            </nav>
             <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+            <a href="{% url 'kavezok:ajanlott' %}">Ajánlások</a>
             {% if user.is_authenticated %}
                 <div class="user-info">
                     <a href="{% url 'kavezok:profil' %}"><span>Bejelentkezve: {{ user.username }}</span></a>
@@ -134,30 +315,33 @@
                     </form>
                 </div>
             {% else %}
-                <a href="{% url 'kavezok:login' %}">Bejelentkezés</a>
+                <a href="{% url 'kavezok:bejelentkezes' %}">Bejelentkezés</a>
             {% endif %}
         </nav>
     </header>
-
     <main>
-        <h1>Ajánlott kávézók</h1>
-        <ul>
-            {% if ajanlott_kavezok %}
-                {% for kavezo in ajanlott_kavezok %}
-                    <li>
-                            <a href="{% url 'kavezok:kavezo_reszletek' kavezo.id %}" style="color: #F9BE7C; text-decoration: none;">
-                                {{ kavezo.nev }}
-                            </a>
-                        <p><strong>Cím:</strong> {{ kavezo.cim }}</p>
-                        <p><strong>Hangulat:</strong> {{ kavezo.hangulat }}</p>
-                        <p><strong>Árkategória:</strong> {{ kavezo.arkategoriak }}</p>
-                        
+        <section class="ajanlott-container">
+            <h1 class="oldal-cim">Ajánlott kávézók</h1>
+            <ul class="ajanlott-kavezo-lista">
+                {% for kavezo in kavezok %}
+                    <li class="ajanlott-kavezo-listaelem 
+                        {% if forloop.counter0 == 0 %} top1{% elif forloop.counter0 == 1 %} top2{% endif %}">
+                        <span class="kave-cs">☕</span>
+                        <a href="{% url 'kavezok:kavezo_reszletek' kavezo.kavezo %}" class="kavezo-link">
+                            {{ kavezo.kavezo__nev }}
+                        </a>
+                        <span class="ajanlas-szam">
+                            (ajánlások száma: <strong>{{ kavezo.gyakorisag }}</strong>)
+                        </span>
+                        {% if forloop.counter <= 3 %}
+                            <span class="ajanlas-badge">✨ TOP {{ forloop.counter }} ✨</span>
+                        {% endif %}
                     </li>
+                {% empty %}
+                    <li class="ajanlott-kavezo-listaelem ures-ajanlas">Jelenleg nincs ajánlás.</li>
                 {% endfor %}
-            {% else %}
-                <p>Nincsenek elérhető ajánlások.</p>
-            {% endif %}
-        </ul>
+            </ul>
+        </section>
     </main>
 
     <footer>

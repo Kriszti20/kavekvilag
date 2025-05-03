@@ -75,8 +75,9 @@ def kavezo_reszletek(request, kavezo_id):
         'nyitvatartasok': nyitvatartasok,
     })
 from django.urls import reverse_lazy
-
-@login_required(login_url=reverse_lazy('kavezok:bejelentkezes'))   # vagy a sima útvonal pl. '/bejelentkezes/'
+from django.core.mail import send_mail
+from django.conf import settings
+@login_required(login_url=reverse_lazy('kavezok:bejelentkezes'))
 def foglalas_letrehozas(request):
     if request.method == 'POST':
         form = FoglalasForm(request.POST)
@@ -87,6 +88,26 @@ def foglalas_letrehozas(request):
                 return render(request, 'kavezok/foglalas_letrehozas.html', {'form': form})
             foglalas.felhasznalo = request.user
             foglalas.save()
+
+            # IDE KERÜL az email szöveg és küldés!
+            szoveg = (
+                    f"Kedves {request.user.username}!\n\n"
+                    f"Foglalásodat rögzítettük.\n"
+                    f"Foglalás részletei:\n"
+                    f"Kávézó: {foglalas.kavezo.nev}\n"
+                    f"Cím: {foglalas.kavezo.cim}\n"
+                    f"Időpont: {foglalas.datum:%Y-%m-%d %H:%M}\n"
+                    f"Személyek száma: {foglalas.szemelyek_szama}\n"
+                    f"Megjegyzés: {foglalas.megjegyzes or '-'}\n\n"
+                    "Köszönjük, hogy minket választottál!"
+                )
+            send_mail(
+                'Foglalás visszaigazolása',
+                szoveg,
+                settings.DEFAULT_FROM_EMAIL,
+                [request.user.email],
+            )
+
             return redirect('kavezok:foglalas_siker')
     else:
         form = FoglalasForm()
@@ -753,15 +774,12 @@ def profil_view(request):
     foglalasok = Foglalas.objects.filter(felhasznalo=request.user)\
         .select_related('kavezo')\
         .order_by('kavezo__nev', '-datum')
-
     # Kávézók kigyűjtése, ahova már foglalt (duplázás nélkül, név szerint rendezve)
     kavezok = Kavezo.objects.filter(foglalas__felhasznalo=request.user).distinct().order_by('nev')
-
     # GET paraméter alapján szűrés, ha kiválasztott kávézó van
     kavezo_id = request.GET.get('kavezo_id')
     if kavezo_id:
         foglalasok = foglalasok.filter(kavezo_id=kavezo_id)
-
     # Rendelések és értékelések ugyanúgy maradnak
     rendelesek = Rendeles.objects.filter(felhasznalo=request.user) \
                                  .prefetch_related('termekek') \
@@ -769,13 +787,16 @@ def profil_view(request):
     ertekelesek = Ertekeles.objects.filter(felhasznalo=request.user) \
                                    .select_related('kavezo') \
                                    .order_by('-datum')
-
     user = request.user
     week_days, checked_days, streak, today = get_personal_streak_window(user)
     pontok_hetre = [1, 3, 5, 5, 14, 10, 20]
+    # EREDMÉNY: [{ "day": dátum, "pont": pontszám }, ...]
+    week = [
+        {"day": day, "pont": pont}
+        for day, pont in zip(week_days, pontok_hetre)
+    ]
     idx_today = (today - week_days[0]).days
     pont_ma = pontok_hetre[idx_today] if 0 <= idx_today < 7 else pontok_hetre[0]
-
     return render(request, "kavezok/profil.html", {
         'user': user,
         'foglalasok': foglalasok,
@@ -789,6 +810,7 @@ def profil_view(request):
         "pontok_hetre": pontok_hetre,
         "streak": streak,
         "today": today,
+        "week": week
     })
     
 def checkin(request):
@@ -830,3 +852,64 @@ def porgeto_view(request):
         'can_spin': can_spin,
         'points_list': SPIN_POINTS,
     })
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.db.models import Count, Q
+
+@login_required
+def ajanlott_kavezok_view(request):
+    foglalas_kavezok = set(Foglalas.objects.filter(felhasznalo=request.user).values_list('kavezo', flat=True))
+    rendeles_kavezok = set(Rendeles.objects.filter(felhasznalo=request.user).values_list('kavezo', flat=True))
+    ertekeles_kavezok = set(Ertekeles.objects.filter(felhasznalo=request.user).values_list('kavezo', flat=True))
+    sajat_kavezok = foglalas_kavezok | rendeles_kavezok | ertekeles_kavezok
+    hasonlo_felhasznalok_ids = set(
+        Foglalas.objects.filter(kavezo__in=sajat_kavezok).exclude(felhasznalo=request.user).values_list('felhasznalo', flat=True)
+    ) | set(
+        Rendeles.objects.filter(kavezo__in=sajat_kavezok).exclude(felhasznalo=request.user).values_list('felhasznalo', flat=True)
+    ) | set(
+        Ertekeles.objects.filter(kavezo__in=sajat_kavezok).exclude(felhasznalo=request.user).values_list('felhasznalo', flat=True)
+    )
+    foglalasok = Foglalas.objects.filter(felhasznalo__in=hasonlo_felhasznalok_ids).exclude(kavezo__in=sajat_kavezok).values('kavezo', 'kavezo__nev')
+    rendelesek = Rendeles.objects.filter(felhasznalo__in=hasonlo_felhasznalok_ids).exclude(kavezo__in=sajat_kavezok).values('kavezo', 'kavezo__nev')
+    ertekelesek = Ertekeles.objects.filter(felhasznalo__in=hasonlo_felhasznalok_ids).exclude(kavezo__in=sajat_kavezok).values('kavezo', 'kavezo__nev')
+    from itertools import chain
+    combined = list(chain(foglalasok, rendelesek, ertekelesek))
+    from collections import Counter, defaultdict
+    counter = Counter()
+    nev_lookup = {}
+    for item in combined:
+        counter[item['kavezo']] += 1
+        nev_lookup[item['kavezo']] = item['kavezo__nev']
+    top_kavezok = counter.most_common(5)
+    ajanlott = [
+        {'kavezo': kavezo_id, 'kavezo__nev': nev_lookup[kavezo_id], 'gyakorisag': szam}
+        for kavezo_id, szam in top_kavezok
+    ]
+    return render(request, "kavezok/ajanlott_kavezok.html", {"kavezok": ajanlott})
+
+from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
+from django.contrib.auth import get_user_model, login
+from django.utils import timezone
+from django.http import HttpResponse
+from kavezok.models import Checkin
+
+signer = TimestampSigner()
+
+def quick_checkin(request, token):
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    signer = TimestampSigner()
+    try:
+        value = signer.unsign(token, max_age=60*60*24)
+        user_id = int(value)
+        user = User.objects.get(pk=user_id)
+        # Automatikus bejelentkeztetés:
+        login(request, user)
+        today = timezone.localdate()
+        if not Checkin.objects.filter(user=user, created=today).exists():
+            Checkin.objects.create(user=user, created=today)
+            return HttpResponse("Sikeres becsekkolás! Köszönjük :)")
+        else:
+            return HttpResponse("Ma már becsekkoltál!")
+    except (BadSignature, SignatureExpired, User.DoesNotExist):
+            return HttpResponse("Érvénytelen vagy lejárt link.", status=400)

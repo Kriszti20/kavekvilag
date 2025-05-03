@@ -326,6 +326,134 @@
             color: #b7bf93;
             font-size: 0.90em;
         }
+        .profil-gombok {
+            margin: 2.2rem 0 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        .profil-btn {
+            display: inline-block;
+            background: #dfa26f;
+            color: #18261c;
+            font-family: 'Georgia', serif;
+            font-size: 1.13rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 38px;
+            margin: 0 auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s, transform 0.18s;
+            cursor: pointer;
+            text-align: center;
+        }
+        .profil-btn:hover, .profil-btn:focus {
+            background: #cf9775;
+            color: #fff4e7;
+            transform: translateY(-2px) scale(1.03);
+            text-decoration: none;
+        }
+        .plus-pont {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 2px;
+        }
+        .plusjel {
+            font-size: 15px;
+            line-height: 1;
+            color: #baa663;
+        }
+        .day-points {
+            font-size: 15px;
+            font-weight: bold;
+            color: #f6b73d;
+            line-height: 1;
+        }
+        /* ------------ RESZPONZÍV KIEGÉSZÍTÉSEK ----------- */
+
+        /* Kis képernyőn (mobil) - alapból minden maximum szélességű */
+        .hero .text-content {
+            max-width: 95%;
+            font-size: 1rem;
+            padding: 0;
+        }
+
+        /* Képek alkalmazkodnak a képernyőhöz */
+        .hero img {
+            max-width: 90vw;
+            width: 100%;
+            height: auto;
+            margin: 1em auto;
+        }
+
+        /* Navigáció egyszerűsítése kis képernyőn pl. függőlegesen elrendezve */
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px 8px;
+                text-align: center;
+            }
+
+            header nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .hero h2 {
+                font-size: 2.2rem;          /* kisebb főcím mobilon */
+            }
+            .hero {
+                height: auto;
+                padding: 16px 0;
+                flex-direction: column;
+            }
+        }
+
+        /* Tablet és nagyobb képernyő */
+        @media (min-width: 1024px) {
+            .hero .text-content {
+                max-width: 50%;
+                font-size: 1.2rem;
+            }
+            .hero img {
+                max-width: 220px;
+            }
+            .hero h2 {
+                font-size: 4rem;
+            }
+        }
+        @media (max-width: 700px) {
+            .blob-1, .blob-2, .blob-3, .blob-4 {
+                display: none; /* vagy tedd őket kisebbre ha szeretnéd látni */
+            }
+        }@media (max-width: 700px) {
+            .blob-1, .blob-2, .blob-3, .blob-4 {
+                width: 60vw !important;
+                height: 60vw !important;
+                left: 10vw !important;
+                top: 10vw !important;
+                right: auto !important;
+                bottom: auto !important;
+            }
+        }
+        body {
+            padding: 0 8px;
+        }
+        @media (min-width: 700px) {
+            body {
+                padding: 0;
+            }
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -339,6 +467,7 @@
                 <a href="{% url 'kavezok:kosar_megjelenitese' %}">Kosár</a>
             </nav>
             <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+            <a href="{% url 'kavezok:ajanlott' %}">Ajánlások</a>
             {% if user.is_authenticated %}
                 <div class="user-info">
                     <a href="{% url 'kavezok:profil' %}"><span>Bejelentkezve: {{ user.username }}</span></a>
@@ -357,54 +486,63 @@
         <p>Jelenlegi pontjaid: <strong>{{ user.profil.total_points|default:"nincs" }}</strong></p>
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Név:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-        <p>
-            <a href="{% url 'kavezok:profil_szerkesztes' %}">Profil szerkesztése</a>
-        </p>
+        <div class="profil-gombok">
+            <a href="{% url 'kavezok:porgeto' %}" class="profil-btn">🎲 Pörgetek</a>
+            <a href="{% url 'kavezok:profil_szerkesztes' %}" class="profil-btn">Profil szerkesztése</a>
+        </div>
     </div>
-    <div>
+<!--   <div>
         <b>WEEK DAYS teszt:</b> {{ week_days }}<br>
         <b>CHECKED teszt:</b> {{ checked_days }}<br>
         <b>PONTOK teszt:</b> {{ pontok_hetre }}<br>
-      </div>
-    <div class="checkin-container">
+      </div>--> 
+
+      <div class="checkin-container">
         <div class="checkin-week-row">
-            {% for day in week_days %}
+            {% for w in week %}
                 <div class="checkin-week-day
-                    {% if day == today %} today{% endif %}
-                    {% if day in checked_days %} checked{% endif %}">
-                    <div class="day-points">
-                        +{{ pontok_hetre|slice:forloop.counter0|stringformat:"d" }}
+                    {% if w.day == today %} today{% endif %}
+                    {% if w.day in checked_days %} checked{% endif %}">
+                    <div class="plus-pont">
+                        <span class="plusjel">+</span>
+                        <span class="day-points">{{ w.pont }}</span>
                     </div>
                     <div class="day-date">
-                        {% if day == today %}Ma{% else %}{{ day|date:"m.d" }}{% endif %}
+                        {% if w.day == today %}
+                            Ma
+                        {% else %}
+                            {{ w.day|date:"m.d" }}
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
         </div>
-        <form method="post" action="{% url 'kavezok:checkin' %}">
-            {% csrf_token %}
-                <button class="checkin-btn"
-                        type="submit"
-                        {% if today in checked_days %} disabled {% endif %}>
-                    {% if today in checked_days %}
-                        Már bejelentkeztél ma!
-                    {% else %}
-                        Mai check-in! (+{{ pont_ma }} pont)
-                    {% endif %}
-                </button>
-        </form>
-        <div class="checkin-streak">
-            Sorozat: <b>{{ streak }}</b> nap
-        </div>
-    </div>
-    {% regroup foglalasok by kavezo as foglalasok_kavezonkent %}
-    {% regroup foglalasok by kavezo as foglalasok_kavezonkent %}
+          <form method="post" action="{% url 'kavezok:checkin' %}">
+              {% csrf_token %}
+                  <button class="checkin-btn"
+                          type="submit"
+                          {% if today in checked_days %} disabled {% endif %}>
+                      {% if today in checked_days %}
+                          Már bejelentkeztél ma!
+                      {% else %}
+                          Mai check-in! (+{{ pont_ma }} pont)
+                      {% endif %}
+                  </button>
+          </form>
+          <div class="checkin-streak">
+              Sorozat: <b>{{ streak }}</b> nap
+          </div>
+      </div>
     {% regroup foglalasok by kavezo as foglalasok_kavezonkent %}
 
     <h2>Foglalásaim (kávézónként)</h2>
     {% for group in foglalasok_kavezonkent %}
       <div class="kavezo-blokk">
-        <h3 style="color:#dfa26f;">{{ group.grouper.nev }}</h3>
+        <h3 style="color:#dfa26f;">
+          <a href="{% url 'kavezok:kavezo_reszletek' group.grouper.id %}" class="kavezo-link">
+            {{ group.grouper.nev }}
+          </a>
+        </h3>
         <ul>
           {% for foglalas in group.list %}
             <li>
@@ -418,7 +556,6 @@
     {% empty %}
       <div>Még nincsenek foglalásaid.</div>
     {% endfor %}
-    
         <h2 style="text-align:center;color:#cf9775;margin:32px 0 7px 0;">Rendeléseid</h2>
         <div class="profile-cards">
             {% for rendeles in rendelesek %}

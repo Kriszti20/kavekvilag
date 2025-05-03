@@ -372,7 +372,86 @@
             max-width: 520px;
             margin: 28px auto;
         }
+        /* ------------ RESZPONZÍV KIEGÉSZÍTÉSEK ----------- */
 
+        /* Kis képernyőn (mobil) - alapból minden maximum szélességű */
+        .hero .text-content {
+            max-width: 95%;
+            font-size: 1rem;
+            padding: 0;
+        }
+
+        /* Képek alkalmazkodnak a képernyőhöz */
+        .hero img {
+            max-width: 90vw;
+            width: 100%;
+            height: auto;
+            margin: 1em auto;
+        }
+
+        /* Navigáció egyszerűsítése kis képernyőn pl. függőlegesen elrendezve */
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px 8px;
+                text-align: center;
+            }
+
+            header nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .hero h2 {
+                font-size: 2.2rem;          /* kisebb főcím mobilon */
+            }
+            .hero {
+                height: auto;
+                padding: 16px 0;
+                flex-direction: column;
+            }
+        }
+
+        /* Tablet és nagyobb képernyő */
+        @media (min-width: 1024px) {
+            .hero .text-content {
+                max-width: 50%;
+                font-size: 1.2rem;
+            }
+            .hero img {
+                max-width: 220px;
+            }
+            .hero h2 {
+                font-size: 4rem;
+            }
+        }
+        @media (max-width: 700px) {
+            .blob-1, .blob-2, .blob-3, .blob-4 {
+                display: none; /* vagy tedd őket kisebbre ha szeretnéd látni */
+            }
+        }@media (max-width: 700px) {
+            .blob-1, .blob-2, .blob-3, .blob-4 {
+                width: 60vw !important;
+                height: 60vw !important;
+                left: 10vw !important;
+                top: 10vw !important;
+                right: auto !important;
+                bottom: auto !important;
+            }
+        }
+        body {
+            padding: 0 8px;
+        }
+        @media (min-width: 700px) {
+            body {
+                padding: 0;
+            }
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -386,6 +465,7 @@
                 <a href="{% url 'kavezok:kosar_megjelenitese' %}">Kosár</a>
             </nav>
             <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+            <a href="{% url 'kavezok:ajanlott' %}">Ajánlások</a>
             {% if user.is_authenticated %}
                 <div class="user-info">
                     <a href="{% url 'kavezok:profil' %}"><span>Bejelentkezve: {{ user.username }}</span></a>

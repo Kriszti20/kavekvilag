@@ -118,5 +118,5 @@ STATICFILES_DIRS = [
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-
+SITE_URL = "http://127.0.0.1:8000"
 

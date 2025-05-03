@@ -89,5 +89,7 @@ urlpatterns = [
     # urls.py
     path('profil/', views.profil_view, name='profil'),
     path("porgeto/", porgeto_view, name="porgeto"),
+    path('ajanlott/', views.ajanlott_kavezok_view, name='ajanlott'),
+    path('quick-checkin/<str:token>/', views.quick_checkin, name='quick_checkin')
 ]
 

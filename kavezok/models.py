@@ -123,10 +123,19 @@ class Member(models.Model):
     def __str__(self):
         return self.nev
     
+from django.db import models
+from django.contrib.auth.models import User
+from datetime import datetime
+
+from django.db import models
+from django.contrib.auth.models import User
+from datetime import datetime
+from django.utils import timezone
+
 class Foglalas(models.Model):
     felhasznalo = models.ForeignKey(User, on_delete=models.CASCADE)
-    kavezo = models.ForeignKey(Kavezo, on_delete=models.CASCADE)
-    datum = models.DateTimeField(default=datetime.now)
+    kavezo = models.ForeignKey('Kavezo', on_delete=models.CASCADE)
+    datum = models.DateTimeField(default=timezone.now)
     szemelyek_szama = models.PositiveIntegerField()
     allapot = models.CharField(
         max_length=20,
@@ -137,10 +146,13 @@ class Foglalas(models.Model):
         ],
         default='függő'
     )
-    megjegyzes = models.TextField(blank=True, null=True)  # Új mező
+    megjegyzes = models.TextField(blank=True, null=True)
+
+    # Emlékeztető email csak egyszer menjen ki
+    emlekezteto_kuldve = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.felhasznalo.username} - {self.kavezo.nev} ({self.datum})"
+        return f"{self.felhasznalo.username} - {self.kavezo.nev} ({self.datum.strftime('%Y-%m-%d %H:%M')})"
 
 
 class Termek(models.Model):

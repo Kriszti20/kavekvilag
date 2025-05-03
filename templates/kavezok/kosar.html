@@ -358,6 +358,201 @@
         header { flex-direction: column; gap: 12px; }
         header .logo { font-size: 1.2rem; }
     }
+    /* ------------ RESZPONZÍV KIEGÉSZÍTÉSEK ----------- */
+
+    /* Kis képernyőn (mobil) - alapból minden maximum szélességű */
+    .hero .text-content {
+        max-width: 95%;
+        font-size: 1rem;
+        padding: 0;
+    }
+
+    /* Képek alkalmazkodnak a képernyőhöz */
+    .hero img {
+        max-width: 90vw;
+        width: 100%;
+        height: auto;
+        margin: 1em auto;
+    }
+
+    /* Navigáció egyszerűsítése kis képernyőn pl. függőlegesen elrendezve */
+    @media (max-width: 700px) {
+        header {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 12px 8px;
+            text-align: center;
+        }
+
+        header nav {
+            flex-direction: column;
+            gap: 8px;
+        }
+        .hero h2 {
+            font-size: 2.2rem;          /* kisebb főcím mobilon */
+        }
+        .hero {
+            height: auto;
+            padding: 16px 0;
+            flex-direction: column;
+        }
+    }
+
+    /* Tablet és nagyobb képernyő */
+    @media (min-width: 1024px) {
+        .hero .text-content {
+            max-width: 50%;
+            font-size: 1.2rem;
+        }
+        .hero img {
+            max-width: 220px;
+        }
+        .hero h2 {
+            font-size: 4rem;
+        }
+    }
+    @media (max-width: 700px) {
+        .blob-1, .blob-2, .blob-3, .blob-4 {
+            display: none; /* vagy tedd őket kisebbre ha szeretnéd látni */
+        }
+    }@media (max-width: 700px) {
+        .blob-1, .blob-2, .blob-3, .blob-4 {
+            width: 60vw !important;
+            height: 60vw !important;
+            left: 10vw !important;
+            top: 10vw !important;
+            right: auto !important;
+            bottom: auto !important;
+        }
+    }
+    body {
+        padding: 0 8px;
+    }
+    @media (min-width: 700px) {
+        body {
+            padding: 0;
+        }
+    }
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    @media (max-width: 900px) {
+        .cart-container { max-width: 99vw; }
+        .cart-table th, .cart-table td { font-size: 0.98em; padding: 7px 3px; }
+      }
+      @media (max-width: 700px) {
+        .cart-container { max-width: 97vw; padding: 4vw 2vw; }
+        .cart-table th, .cart-table td { font-size: 0.93em; padding: 6px 2px; }
+        .cart-btn, .rendeles-btn { font-size: 1em; padding: 6px 6px; }
+        input[type="number"] { max-width: 33px; }
+      }
+      @media (max-width: 700px) {
+        .cart-container {
+          max-width: 99vw;
+          padding: 4vw 1vw;
+        }
+        .cart-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 0.93em;
+          background: none;
+        }
+        .cart-table thead {
+          display: none;
+        }
+        .cart-table tr {
+          display: block;
+          margin-bottom: 14px;
+          border: 1px solid #ccbcae;
+          border-radius: 8px;
+          background: #22352d;
+          box-shadow: 0 1px 4px #16121233;
+          padding: 6px;
+        }
+        .cart-table td {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 6px 2px;
+          width: 100%;
+          border: none;
+          font-size: 1em;
+          min-width: unset;
+          word-break: break-word;
+          /* margin-left, margin-right az első/utolsó cellához adható, ha kell */
+        }
+        /* minden td előtt jelenjen meg a fejléc neve mobil nézetben */
+        .cart-table td::before {
+          content: attr(data-label);
+          font-weight: bold;
+          color: #dfa26f;
+          flex-shrink: 0;
+          margin-right: 10px;
+          min-width: 90px;
+          text-align: left;
+        }
+        /* Gombokat nagyobbítsuk kissé */
+        .cart-btn, .rendeles-btn, .torles-btn {
+          padding: 8px 14px !important;
+          font-size: 1em !important;
+          min-width: 56px;
+          white-space: nowrap;
+        }
+      }
+      @media (max-width: 700px) {
+        .cart-table {
+          display: block;
+          width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+        .cart-table table, .cart-table tr, .cart-table th, .cart-table td {
+          white-space: nowrap;
+        }
+      }
+      @media (max-width: 700px) {
+        .cart-table-outer {
+          overflow-x: auto;
+          width: 100%;
+        }
+        .cart-table {
+          min-width: 600px;
+          /* vagy annyi, amennyi kell */
+        }
+      }
+      .cart-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 10px;
+      }
+      .cart-card {
+        background: #22352d;
+        border-radius: 10px;
+        padding: 13px 17px;
+        box-shadow: 0 1px 4px #16121233;
+        color: #ffd488;
+        font-size: 1em;
+      }
+      
+      .cart-card form {
+        display: inline;
+      }
+      .cart-btn {
+        margin-left: 5px;
+      }
+      
+      /* Mobilon a table-t NE jelenítsd meg! */
+      @media (max-width: 700px) {
+        .cart-table {
+          display: none !important;
+        }
+        .cart-list {
+          display: flex;
+        }
+      }
     </style>
 </head>
 <body>
@@ -420,6 +615,86 @@
         color: #fff;
     }
       .cart-container { display: none; }
+      /* ------------ RESZPONZÍV KIEGÉSZÍTÉSEK ----------- */
+
+        /* Kis képernyőn (mobil) - alapból minden maximum szélességű */
+        .hero .text-content {
+            max-width: 95%;
+            font-size: 1rem;
+            padding: 0;
+        }
+
+        /* Képek alkalmazkodnak a képernyőhöz */
+        .hero img {
+            max-width: 90vw;
+            width: 100%;
+            height: auto;
+            margin: 1em auto;
+        }
+
+        /* Navigáció egyszerűsítése kis képernyőn pl. függőlegesen elrendezve */
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px 8px;
+                text-align: center;
+            }
+
+            header nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .hero h2 {
+                font-size: 2.2rem;          /* kisebb főcím mobilon */
+            }
+            .hero {
+                height: auto;
+                padding: 16px 0;
+                flex-direction: column;
+            }
+        }
+
+        /* Tablet és nagyobb képernyő */
+        @media (min-width: 1024px) {
+            .hero .text-content {
+                max-width: 50%;
+                font-size: 1.2rem;
+            }
+            .hero img {
+                max-width: 220px;
+            }
+            .hero h2 {
+                font-size: 4rem;
+            }
+        }
+        @media (max-width: 700px) {
+            .blob-1, .blob-2, .blob-3, .blob-4 {
+                display: none; /* vagy tedd őket kisebbre ha szeretnéd látni */
+            }
+        }@media (max-width: 700px) {
+            .blob-1, .blob-2, .blob-3, .blob-4 {
+                width: 60vw !important;
+                height: 60vw !important;
+                left: 10vw !important;
+                top: 10vw !important;
+                right: auto !important;
+                bottom: auto !important;
+            }
+        }
+        body {
+            padding: 0 8px;
+        }
+        @media (min-width: 700px) {
+            body {
+                padding: 0;
+            }
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
     </style>
   {% endif %}
   <header>
@@ -432,9 +707,10 @@
             <a href="{% url 'kavezok:kosar_megjelenitese' %}">Kosár</a>
         </nav>
         <a href="{% url 'kavezok:foglalas_letrehozas' %}">Foglalás</a>
+        <a href="{% url 'kavezok:ajanlott' %}">Ajánlások</a>
         {% if user.is_authenticated %}
             <div class="user-info">
-                <a href="{% url 'kavezok:profil' %}" class="Bejelentkezve"><span>Bejelentkezve: {{ user.username }}</span></a>
+                <a href="{% url 'kavezok:profil' %}"><span>Bejelentkezve: {{ user.username }}</span></a>
                 <form method="post" action="{% url 'kavezok:logout' %}" class="logout-form">
                     {% csrf_token %}
                     <button type="submit">Kijelentkezés</button>
@@ -551,6 +827,7 @@
         {% endif %}
       </table>
     </div>
+    <div class="cart-table-outer">
       <table class="cart-table">
         <tr>
             <th>Termék</th>
@@ -584,6 +861,7 @@
       </tr>
         {% endfor %}
     </table>
+</div>
 
       <form method="post" action="{% url 'kavezok:kosar_veglegesites' %}">
         {% csrf_token %}
